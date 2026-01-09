@@ -50,6 +50,7 @@
     kubelogin
     kubelogin-oidc
     kubernetes-helm
+    libcamera
     libnotify
     lsof
     lua5_1

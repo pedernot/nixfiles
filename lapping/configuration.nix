@@ -1,7 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
-    # ./mipi.nix
   ];
 
   boot = {
@@ -9,6 +12,7 @@
     supportedFilesystems = ["btrfs"];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
+    extraModulePackages = with config.boot.kernelPackages; [ipu6-drivers];
   };
 
   hardware = {
@@ -23,6 +27,14 @@
         };
       };
     };
+    ipu6 = {
+      enable = true;
+      platform = "ipu6ep";
+    };
+    firmware = with pkgs; [
+      ipu6-camera-bins
+      ivsc-firmware
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -61,11 +73,23 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      wireplumber.enable = true;
+      wireplumber = {
+        enable = true;
+        extraConfig = {
+          "disable-v4l2" = {
+            "wireplumber.profiles" = {
+              "main" = {"monitor.v4l2" = "disabled";};
+            };
+          };
+        };
+      };
     };
     hardware.bolt.enable = true;
     tailscale.enable = true;
     resolved.enable = true;
+    udev.extraRules = ''
+      SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
+    '';
   };
 
   users.users.peder = {
