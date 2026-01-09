@@ -14,6 +14,7 @@
     acpi
     xdg-desktop-portal-wlr
     xdg-desktop-portal
+    chromium
     alejandra
     alsa-utils
     ansible-lint
