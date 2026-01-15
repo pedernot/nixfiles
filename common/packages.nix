@@ -7,6 +7,7 @@
     config.allowUnfreePredicate = pkg:
       builtins.elem (lib.getName pkg) [
         "spotify"
+        "claude-code"
       ];
   };
   home.packages = with pkgs; [
@@ -15,6 +16,7 @@
     xdg-desktop-portal-wlr
     xdg-desktop-portal
     chromium
+    claude-code
     alejandra
     alsa-utils
     ansible-lint
