@@ -2,6 +2,7 @@
   imports = [
     ../common
     ./sway.nix
+    ./terminal.nix
   ];
   home.packages = with pkgs; [
     hledger
