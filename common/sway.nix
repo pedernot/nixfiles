@@ -19,6 +19,17 @@
     config = rec {
       modifier = "Mod4";
 
+      startup = [
+        {
+          command = "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP";
+          always = true;
+        }
+        {
+          command = "dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP";
+          always = true;
+        }
+      ];
+
       bars = [
         {
           position = "top";
@@ -69,5 +80,8 @@
         };
       };
     };
+    extraConfig = ''
+      set $XDG_CURRENT_DESKTOP sway
+    '';
   };
 }

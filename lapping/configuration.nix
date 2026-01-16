@@ -68,11 +68,13 @@
   ];
 
   services = {
+    pulseaudio.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      jack.enable = true;
       wireplumber = {
         enable = true;
         extraConfig = {
@@ -90,6 +92,12 @@
     udev.extraRules = ''
       SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
     '';
+  };
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [];
   };
 
   users.users.peder = {
