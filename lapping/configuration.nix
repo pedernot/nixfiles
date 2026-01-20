@@ -98,6 +98,7 @@
     enable = true;
     wlr.enable = true;
     extraPortals = [];
+    config.common.default = "*";
   };
 
   users.users.peder = {
