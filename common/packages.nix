@@ -13,10 +13,6 @@
   home.packages = with pkgs; [
     # kubectl
     acpi
-    xdg-desktop-portal-wlr
-    xdg-desktop-portal
-    chromium
-    claude-code
     alejandra
     alsa-utils
     ansible-lint
@@ -25,6 +21,8 @@
     bat
     brightnessctl
     btop
+    chromium
+    claude-code
     codex
     ctags
     difftastic
@@ -63,6 +61,7 @@
     nixd
     nodePackages.bash-language-server
     nodejs
+    opencode
     openssl
     ormolu
     pinentry-qt
