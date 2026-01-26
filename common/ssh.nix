@@ -18,21 +18,21 @@
       };
       "staging" = {
         hostname = "app9";
-        proxyCommand = "ssh -q -W app9:%p bast1";
+        proxyCommand = "ssh -q -W app9:%p bast2";
       };
       "app*" = {
-        proxyCommand = "ssh -q -W %h:%p bast1";
+        proxyCommand = "ssh -q -W %h:%p bast2";
       };
       "util1" = {
-        proxyCommand = "ssh -q -W %h:%p bast1";
+        proxyCommand = "ssh -q -W %h:%p bast2";
       };
       "search*" = {
-        proxyCommand = "ssh -q -W %h:%p bast1";
+        proxyCommand = "ssh -q -W %h:%p bast2";
       };
       "dora-cluster" = {
         hostname = "search1";
         dynamicForwards = [{port = 1080;}];
-        proxyCommand = "ssh -q -W search1:%p bast1";
+        proxyCommand = "ssh -q -W search1:%p bast2";
         extraOptions = {SessionType = "none";};
       };
       "mimir-db" = {
@@ -44,7 +44,7 @@
             host.port = 5432;
           }
         ];
-        proxyCommand = "ssh -q -W search1:%p bast1";
+        proxyCommand = "ssh -q -W search1:%p bast2";
         extraOptions = {SessionType = "none";};
       };
       "ci-cluster" = {
