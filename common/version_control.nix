@@ -113,6 +113,7 @@
         ".jjconflict*"
         "shell.nix"
         ".direnv"
+        ".opencode"
       ];
     };
 
