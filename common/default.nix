@@ -5,6 +5,7 @@
     ./xdg.nix
     ./sway.nix
     ./services.nix
+    ./ai.nix
   ];
 
   home = {

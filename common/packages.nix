@@ -61,7 +61,6 @@
     nixd
     nodePackages.bash-language-server
     nodejs
-    opencode
     openssl
     ormolu
     pinentry-qt
