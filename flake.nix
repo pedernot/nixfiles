@@ -30,6 +30,18 @@
           }
         ];
       };
+      heisenberg = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs;};
+        system = "x86_64-linux";
+        modules = [
+          ./heisenberg/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useUserPackages = true;
+            home-manager.users.peder = import ./heisenberg/home.nix;
+          }
+        ];
+      };
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
