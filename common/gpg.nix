@@ -19,6 +19,10 @@
           source = ../peder.galteland.pem;
           trust = "ultimate";
         }
+        {
+          source = ../personal-key;
+          trust = "ultimate";
+        }
       ];
     };
   };
