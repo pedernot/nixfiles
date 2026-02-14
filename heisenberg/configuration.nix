@@ -79,6 +79,10 @@
     };
     hardware.bolt.enable = true;
     resolved.enable = true;
+    printing = {
+      enable = true;
+      drivers = [pkgs.cnijfilter2];
+    };
   };
 
   xdg.portal = {
