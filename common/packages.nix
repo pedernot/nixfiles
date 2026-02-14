@@ -8,6 +8,7 @@
       builtins.elem (lib.getName pkg) [
         "spotify"
         "claude-code"
+        "discord"
       ];
   };
   home.packages = with pkgs; [
