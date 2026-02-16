@@ -102,6 +102,7 @@
 
     yazi = {
       enable = true;
+      shellWrapperName = "y";
     };
 
     zoxide = {
