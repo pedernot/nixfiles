@@ -74,6 +74,30 @@
 
     smug = {
       enable = true;
+      projects = {
+        nixfiles = {
+          root = "~/workspace/nixfiles";
+          windows = [
+            {
+              name = "code";
+              root = ".";
+              layout = "even-horizontal";
+              panes = [
+                {
+                  type = "horizontal";
+                  commands = ["nvim"];
+                }
+              ];
+            }
+            {
+              name = "email";
+              root = ".";
+              layout = "even-horizontal";
+              commands = ["mbsync -a" "mutt"];
+            }
+          ];
+        };
+      };
     };
 
     yazi = {
