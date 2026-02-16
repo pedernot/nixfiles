@@ -15,5 +15,13 @@ _: {
   ];
   programs = {
     home-manager.enable = true;
+    nh = {
+      enable = true;
+      clean = {
+        enable = true;
+        extraArgs = "--keep-since 5d --keep 3";
+      };
+      flake = "/home/peder/workspace/nixfiles";
+    };
   };
 }
