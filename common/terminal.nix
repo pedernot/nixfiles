@@ -72,6 +72,14 @@
       ];
     };
 
+    smug = {
+      enable = true;
+    };
+
+    yazi = {
+      enable = true;
+    };
+
     zoxide = {
       enable = true;
       enableZshIntegration = true;
