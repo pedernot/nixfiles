@@ -85,7 +85,7 @@
               panes = [
                 {
                   type = "horizontal";
-                  commands = ["nvim"];
+                  commands = ["nvim ."];
                 }
               ];
             }
