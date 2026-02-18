@@ -74,6 +74,7 @@
     nix-ld.enable = true;
     gnupg.agent.enable = true;
     zsh.enable = true;
+    steam.enable = true;
   };
 
   fonts.packages = with pkgs; [
