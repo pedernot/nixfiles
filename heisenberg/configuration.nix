@@ -107,7 +107,7 @@
     resolved.enable = true;
     printing = {
       enable = true;
-      drivers = [pkgs.cnijfilter2];
+      drivers = [pkgs.cnijfilter_2_80];
     };
     xserver.videoDrivers = ["nvidia"];
   };
