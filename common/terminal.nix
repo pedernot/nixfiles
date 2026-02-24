@@ -75,6 +75,69 @@
     smug = {
       enable = true;
       projects = {
+        capture-backend = {
+          root = "~/workspace/capture-backend";
+          windows = [
+            {
+              name = "shell";
+              layout = "even-horizontal";
+              panes = [
+                {
+                  type = "horizontal";
+                  commands = ["jj l"];
+                }
+              ];
+            }
+            {
+              name = "code";
+              root = "capture-storage";
+              layout = "even-horizontal";
+              commands = ["nvim"];
+            }
+            {
+              name = "k8s";
+              root = "capture-storage";
+              layout = "main-vertical";
+              commands = ["ssh dora-cluster"];
+              panes = [
+                {
+                  type = "horizontal";
+                  commands = ["k9s"];
+                }
+              ];
+            }
+            {
+              name = "mimir";
+              root = "mimir";
+              layout = "even-horizontal";
+            }
+            {
+              name = "search";
+              root = "search-backend";
+              layout = "even-horizontal";
+            }
+          ];
+        };
+        tests = {
+          root = "~/workspace/capture-backend";
+          windows = [
+            {
+              name = "lints";
+              root = ".";
+              layout = "even-horizontal";
+            }
+            {
+              name = "tests";
+              root = ".";
+              layout = "even-horizontal";
+            }
+            {
+              name = "staging";
+              root = ".";
+              layout = "even-horizontal";
+            }
+          ];
+        };
         nixfiles = {
           root = "~/workspace/nixfiles";
           windows = [
@@ -93,7 +156,7 @@
               name = "email";
               root = ".";
               layout = "even-horizontal";
-              commands = ["mbsync -a" "mutt"];
+              commands = ["mbsync -a; mutt"];
             }
           ];
         };
