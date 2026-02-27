@@ -57,6 +57,7 @@
 
   services = {
     pcscd.enable = true;
+    udev.packages = [pkgs.yubikey-personalization];
     pipewire = {
       enable = true;
       alsa.enable = true;
