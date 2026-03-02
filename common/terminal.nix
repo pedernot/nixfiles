@@ -135,6 +135,7 @@
               name = "staging";
               root = ".";
               layout = "even-horizontal";
+              commands = ["ssh staging"];
             }
           ];
         };
