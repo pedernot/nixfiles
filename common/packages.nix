@@ -73,6 +73,7 @@
     rsync
     shellcheck
     skaffold
+    slides
     slurp
     sops
     spotify
