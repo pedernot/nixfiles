@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }: {
   imports = [
@@ -107,10 +106,6 @@
     extraGroups = ["wheel" "docker"];
     shell = pkgs.zsh;
   };
-
-  environment.systemPackages = [
-    inputs.zen-browser.packages."${pkgs.system}".default
-  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

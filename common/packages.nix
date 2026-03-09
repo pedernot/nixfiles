@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  inputs,
   ...
 }: {
   nixpkgs = {
@@ -97,5 +98,6 @@
     yq
     yt-dlp
     zathura
+    inputs.zen-browser.packages."${pkgs.system}".default
   ];
 }
