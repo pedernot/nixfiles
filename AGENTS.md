@@ -34,6 +34,8 @@ nix flake check
 nixos-rebuild build --flake .#lapping
 ```
 
+Important: NEVER run nixos-rebuild
+
 ## Formatting and Linting
 
 ### Formatters (format-on-save enabled in Neovim)
