@@ -132,6 +132,12 @@
               layout = "even-horizontal";
             }
             {
+              name = "opencode";
+              root = ".";
+              layout = "even-horizontal";
+              commands = ["opencode"];
+            }
+            {
               name = "staging";
               root = ".";
               layout = "even-horizontal";
