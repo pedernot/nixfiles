@@ -8,10 +8,11 @@
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_18;
     supportedFilesystems = ["btrfs"];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
+    initrd.kernelModules = ["nvidia"];
   };
 
   hardware = {
