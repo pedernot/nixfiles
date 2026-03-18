@@ -16,7 +16,6 @@ return {
 	{ "tpope/vim-vinegar" },
 
 	-- -- Other langs
-	{ "sheerun/vim-polyglot" },
 	{ "nathangrigg/vim-beancount" },
 	{ "jjo/vim-cue" },
 	{ "luizribeiro/vim-cooklang" },
