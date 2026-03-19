@@ -30,9 +30,9 @@ bindkey -M viins 'jk' vi-cmd-mode
 # pipenv
 export PIPENV_VENV_IN_PROJECT=1
 
-function preexec() {
-    _tmux_update_env
-    _update_agents
+function precmd() {
+  _tmux_update_env
+  _update_agents
 }
 
 export DO_NOT_TRACK=1

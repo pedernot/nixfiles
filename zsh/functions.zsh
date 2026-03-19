@@ -9,29 +9,37 @@ function fkill() {
 }
 
 function _update_agents {
-    # take over SSH keychain (with gpg-agent soon) but only on local machine, not remote ssh machine
-    # keychain used in a non-invasive way where it's up to you to add your keys to the agent.
-    if [ ! "$SSH_CONNECTION" ] && which gpg-connect-agent &>/dev/null; then
-        export SSH_AUTH_SOCK=$(gpgconf --list-dirs | grep agent-ssh-socket | cut -f 2 -d :)
-        # start GPG agent, and update TTY. For the former only, omit updatestartuptty
-        # ssh-agent protocol can't tell gpg-agent/pinentry what tty to use, so tell it
-        # if GPG agent has locked up or there is a stale remote agent, remove
-        # the stale socket and possible local agent.
-        if ! timeout -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null; then
-            echo "Removing stale GPG agent"
-            socket=$(gpgconf --list-dirs | grep agent-socket | cut -f 2 -d :)
-            test -S $socket && rm $socket
-            killall -KILL gpg-agent 2> /dev/null
-            # try again
-            timeout -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null
-        fi
-    fi
+  local force=${1:-0}
+  local cooldown=60
+
+  [[ -n "$SSH_CONNECTION" ]] && return
+  (( $+commands[gpg-connect-agent] )) || return
+  (( $+commands[gpgconf] )) || return
+
+  typeset -gi _AGENTS_LAST_REFRESH
+  if (( force == 0 )) && (( EPOCHSECONDS - _AGENTS_LAST_REFRESH < cooldown )); then
+    return
+  fi
+  _AGENTS_LAST_REFRESH=$EPOCHSECONDS
+
+  export SSH_AUTH_SOCK
+  SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+
+  if ! timeout -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null; then
+    local socket
+    echo "Removing stale GPG agent"
+    socket="$(gpgconf --list-dirs agent-socket)"
+    test -S "$socket" && rm "$socket"
+    killall -KILL gpg-agent 2>/dev/null
+    timeout -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null
+  fi
+}
+
+function agents_refresh {
+  _update_agents 1
 }
 
 function _tmux_update_env {
-        # tmux must be running
-        [ "$TMUX" ] || return
-
-        # update current shell to parent tmux shell (useful for new SSH connections, x forwarding, etc)
-        eval $(tmux show-environment -s | grep 'DISPLAY\|SSH_CONNECTION\|SSH_AUTH_SOCK')
-    }
+  [[ -n "$TMUX" ]] || return
+  eval "$(tmux show-environment -s | grep 'DISPLAY\|SSH_CONNECTION\|SSH_AUTH_SOCK')"
+}
