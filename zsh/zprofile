@@ -1,6 +1,0 @@
-# Set up gpg as ssh-agent
-# if [ -z "$SSH_CLIENT" ]; then
-#   export GPG_TTY="$(tty)"
-#   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-#   gpgconf --launch gpg-agent
-# fi

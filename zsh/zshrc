@@ -23,24 +23,9 @@ bindkey '^[f' forward-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
-# Visual mode fixes
-export KEYTIMEOUT=1
-
-#Configurations
-conf() {
-  cd $HOME/workspace/nixfiles
-  f=$(fd -t f . | fzf)
-  sha1=$(sha1sum $f | awk '{print $1}')
-  nvim $f
-  newsha1=$(sha1sum $f | awk '{print $1}')
-  test $sha1 != $newsha1 && home-manager switch
-  cd - 1>/dev/null
-}
-
 # Vim mode improvements
 export KEYTIMEOUT=10
 bindkey -M viins 'jk' vi-cmd-mode
-
 
 # pipenv
 export PIPENV_VENV_IN_PROJECT=1
@@ -56,27 +41,6 @@ export DO_NOT_TRACK=1
 export PYRIGHT_PYTHON_IGNORE_WARNINGS=1
 
 # Lazy-loading completion
-if [ $commands[bw] ]; then
-  bw() {
-    unfunction "$0"
-    eval "$(bw completion --shell zsh); compdef _bw bw;"
-    $0 "$@"
-  }
-fi
-if [ $commands[klog] ]; then
-  klog() {
-    unfunction "$0"
-    source <(klog completion -c zsh)
-    $0 "$@"
-  }
-fi
-if [ $commands[pipenv] ]; then
-  pipenv() {
-    unfunction "$0"
-    eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
-    $0 "$@"
-  }
-fi
 if [ $commands[pip] ]; then
   pip() {
     unfunction "$0"
@@ -115,4 +79,4 @@ if [ $commands[kubectl] ]; then
 fi
 
 #----Machine-specific----
-test -f $ZDOTDIR/machine_specific && source $ZDOTDIR/machine_specific
+test -f "$ZDOTDIR/machine_specific" && source "$ZDOTDIR/machine_specific"

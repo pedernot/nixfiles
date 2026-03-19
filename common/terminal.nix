@@ -21,7 +21,6 @@
     zsh = {
       enable = true;
       dotDir = "${config.xdg.configHome}/zsh";
-      profileExtra = lib.strings.fileContents ../zsh/zprofile;
       plugins = [
         {
           name = "zsh-nix-shell";

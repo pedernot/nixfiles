@@ -1,34 +1,3 @@
-function new-tmux-from-dir-name {
-  tmux new-session -As `basename $PWD`
-}
-
-function tm() {
-  local session
-  newsession=${1:-new}
-  session=$(tmux list-sessions -F "#{session_name}" | \
-    fzf --query="$1" --select-1 --exit-0) &&
-    tmux attach-session -t "$session" || tmux new-session -s $newsession
-}
-
-function tw() {
-  local target
-  target=$(tmux list-windows -a -F "#{window_name} #{session_name}:#{window_index}" | \
-    fzf --select-1 --exit-0 | awk '{print $2}') && \
-    tmux switch-client -t "$target"
-}
-
-function v() {
-  local files
-  files=$(grep '^>' $XDG_DATA_HOME/vim/viminfo | cut -c3- |
-  while read line; do
-    echo "$line"
-  done | fzf-tmux -d -m -q "$*" -1) && vim ${files//\~/$HOME}
-}
-
-function vrg() {
-  vim $(rg $1 -l)
-}
-
 function fkill() {
   local pid
   pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
@@ -66,17 +35,3 @@ function _tmux_update_env {
         # update current shell to parent tmux shell (useful for new SSH connections, x forwarding, etc)
         eval $(tmux show-environment -s | grep 'DISPLAY\|SSH_CONNECTION\|SSH_AUTH_SOCK')
     }
-
-function gssh() {
-  echo "Killing remote agent"
-  cat <<'EOF' | command ssh -T "$@" bash
-    set -e
-    timeout -k 2 1 gpgconf --kil gpg-agent || true
-EOF
-  echo "Connecting"
-  ssh "$@"
-}
-
-function venv_activate() {
-  . .venv/bin/activate
-}
