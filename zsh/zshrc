@@ -1,10 +1,3 @@
-autoload -U bashcompinit
-bashcompinit
-setopt incappendhistory autocd extendedglob
-unsetopt beep nomatch notify
-setopt prompt_subst
-setopt NO_HUP
-
 # Disable c-s hanging of terminal
 stty -ixon
 
@@ -24,65 +17,13 @@ bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
 # Vim mode improvements
-export KEYTIMEOUT=10
+KEYTIMEOUT=10
 bindkey -M viins 'jk' vi-cmd-mode
-
-# pipenv
-export PIPENV_VENV_IN_PROJECT=1
 
 function precmd() {
   _tmux_update_env
   _update_agents
 }
-
-export DO_NOT_TRACK=1
-
-#pyright
-export PYRIGHT_PYTHON_IGNORE_WARNINGS=1
-
-# Lazy-loading completion
-if (( $+commands[pip] )); then
-  pip() {
-    unfunction "$0"
-    eval "$(pip completion --zsh)"
-    $0 "$@"
-  }
-fi
-
-if (( $+commands[jj] )); then
-  jj() {
-    unfunction "$0"
-    source <(COMPLETE=zsh jj)
-    $0 "$@"
-  }
-fi
-
-
-if (( $+commands[uv] )); then
-  uv() {
-    unfunction "$0"
-    eval "$(uv --generate-shell-completion zsh)"
-    $0 "$@"
-  }
-fi
-
-if (( $+commands[capbak] )); then
-  eval "$(capbak completion)"
-fi
-if (( $+commands[mimir] )); then
-  eval "$(mimir completion)"
-fi
-if (( $+commands[search] )); then
-  eval "$(search completion)"
-fi
-
-if (( $+commands[kubectl] )); then
-  kubectl() {
-    unfunction "$0"
-    eval "$(kubectl completion zsh)"
-    $0 "$@"
-  }
-fi
 
 #----Machine-specific----
 test -f "$ZDOTDIR/machine_specific" && source "$ZDOTDIR/machine_specific"

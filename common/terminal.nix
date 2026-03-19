@@ -21,6 +21,44 @@
     zsh = {
       enable = true;
       dotDir = "${config.xdg.configHome}/zsh";
+      shellAliases = {
+        grep = "grep --color=auto";
+        cp = "cp -iv";
+        rm = "rm -iv --one-file-system";
+        mv = "mv -iv";
+        mkdir = "mkdir -p -v";
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        "...." = "cd ../../..";
+        "....." = "cd ../../../..";
+        tnew = "new-tmux-from-dir-name";
+        tree = "tree -C";
+
+        ls = "ls -hF --color=auto";
+        lr = "ls -R";
+        ll = "ls -l";
+        la = "ll -A";
+        lx = "ll -BX";
+        lz = "ll -rS";
+        lt = "ll -rt";
+        lm = "la | more";
+
+        gpgreset = "gpg-connect-agent updatestartuptty /bye";
+        https = "http --default-scheme=https";
+        mutt = "neomutt";
+        startx = "startx $XINITRC";
+        tmux = "tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf";
+        mbsync = "mbsync -c \"$XDG_CONFIG_HOME\"/isync/mbsyncrc";
+        abook = "abook --config \"$XDG_CONFIG_HOME\"/abook/abookrc --datafile \"$XDG_DATA_HOME\"/notes/addressbook";
+        wget = "wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'";
+        bat = "bat --theme='base16'";
+
+        j = "zi";
+
+        k = "kubectl";
+        kctx = "kubectx";
+        kns = "kubens";
+      };
       plugins = [
         {
           name = "zsh-nix-shell";
@@ -34,13 +72,20 @@
         }
       ];
       syntaxHighlighting.enable = true;
-      initContent = builtins.concatStringsSep "\n" [
-        ''
-          ${lib.strings.fileContents ../zsh/zshrc}
-          ${lib.strings.fileContents ../zsh/aliases.zsh}
-          ${lib.strings.fileContents ../zsh/functions.zsh}
-        ''
+      setOptions = [
+        "INC_APPEND_HISTORY"
+        "AUTO_CD"
+        "EXTENDED_GLOB"
+        "PROMPT_SUBST"
+        "NO_HUP"
+        "NO_BEEP"
+        "NO_NOMATCH"
+        "NO_NOTIFY"
       ];
+      initContent = ''
+        ${lib.strings.fileContents ../zsh/functions.zsh}
+        ${lib.strings.fileContents ../zsh/zshrc}
+      '';
       history = {
         path = "${config.programs.zsh.dotDir}/histfile";
       };

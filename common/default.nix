@@ -3,6 +3,7 @@
     ./packages.nix
     ./scripts.nix
     ./programs.nix
+    ./zsh-completions.nix
     ./xdg.nix
     ./sway.nix
     ./services.nix
@@ -18,8 +19,11 @@
     sessionPath = ["$HOME/.local/bin"];
     sessionVariables = {
       COMPOSE_BAKE = "true";
+      DO_NOT_TRACK = "1";
       KUBECONFIG = "$HOME/.config/kube/config.yaml";
       MOZ_ENABLE_WAYLAND = "1";
+      PIPENV_VENV_IN_PROJECT = "1";
+      PYRIGHT_PYTHON_IGNORE_WARNINGS = "1";
     };
   };
 

@@ -4,5 +4,6 @@ _: {
     ./sway.nix
     ./nvim.nix
     ./scripts.nix
+    ./zsh.nix
   ];
 }
