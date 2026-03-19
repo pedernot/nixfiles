@@ -34,7 +34,7 @@ alias mbsync="mbsync -c "$XDG_CONFIG_HOME"/isync/mbsyncrc"
 alias abook="abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/notes/addressbook"
 alias wget="wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'"
 
-alias bat="bat --theme='base16-256'"
+alias bat="bat --theme='base16'"
 
 alias j=zi
 

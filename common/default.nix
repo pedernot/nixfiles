@@ -6,6 +6,7 @@
     ./sway.nix
     ./services.nix
     ./ai.nix
+    ./theme.nix
   ];
 
   home = {
@@ -34,9 +35,5 @@
   home.file.".local/bin" = {
     source = ../bin;
     recursive = true;
-  };
-
-  xdg.configFile = {
-    "tinted-theming/tinty/config.toml".source = ../tinty.toml;
   };
 }

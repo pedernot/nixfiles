@@ -83,7 +83,6 @@
     strace
     stylua
     swayimg
-    tinty
     tokei
     tree
     units

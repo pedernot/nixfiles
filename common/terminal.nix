@@ -10,8 +10,10 @@
       settings = {
         main = {
           dpi-aware = "yes";
+          # Colors are managed by stylix.targets.foot (see common/theme.nix).
+          # Font is set here explicitly; stylix.targets.foot.fonts is disabled
+          # to avoid conflicts with per-host font/size overrides.
           font = "Hack Nerd Font Mono:size=8, Noto Color Emoji:size=8";
-          include = "~/.local/share/tinted-theming/tinty/tinted-terminal-themes-foot-file.ini";
         };
       };
     };

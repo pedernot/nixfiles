@@ -12,6 +12,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -27,6 +31,7 @@
         system = "x86_64-linux";
         modules = [
           ./lapping/configuration.nix
+          inputs.stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -42,6 +47,7 @@
         system = "x86_64-linux";
         modules = [
           ./heisenberg/configuration.nix
+          inputs.stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -53,9 +59,11 @@
         ];
       };
       nixos = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs;};
         system = "x86_64-linux";
         modules = [
           ./nixos/configuration.nix
+          inputs.stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
