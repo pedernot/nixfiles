@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./packages.nix
+    ./scripts.nix
     ./programs.nix
     ./xdg.nix
     ./sway.nix
@@ -30,10 +31,5 @@
       emoji = ["Noto Color Emoji"];
       monospace = ["Hack Nerd Font Mono"];
     };
-  };
-
-  home.file.".local/bin" = {
-    source = ../bin;
-    recursive = true;
   };
 }

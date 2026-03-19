@@ -10,7 +10,7 @@ NixOS/Home Manager dotfiles repository using Nix flakes for declarative system c
 - `nixos/` - Personal laptop configuration
 - `nvim/` - Neovim config (Lua): `init.lua`, `lua/config/`, `lua/plugins/`
 - `zsh/` - Zsh configuration files
-- `bin/` - Custom scripts (installed to ~/.local/bin)
+- `common/scripts.nix` - Custom script wrappers packaged via Nix
 - `skills/` - AI agent skills documentation
 
 ## Build/Deploy Commands
@@ -103,7 +103,7 @@ imports = [
 
 **Shebang**: Use `#!/usr/bin/env bash` for bash scripts
 
-**Location**: Place custom scripts in `bin/` (auto-installed to `~/.local/bin`)
+**Location**: Define custom scripts in `common/scripts.nix` using `writeShellApplication`
 
 ## Version Control
 

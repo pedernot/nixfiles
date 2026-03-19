@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-test -f "$HOME"/workspace/capture-backend/bin/mimir || exit 0
-"$HOME"/workspace/capture-backend/bin/mimir "$@"
