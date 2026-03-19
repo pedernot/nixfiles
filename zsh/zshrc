@@ -37,12 +37,6 @@ conf() {
   cd - 1>/dev/null
 }
 
-# forgit
-if [ ! -f $ZDOTDIR/forgit/forgit.plugin.zsh ]; then
-  git clone https://github.com/wfxr/forgit $ZDOTDIR/forgit/
-fi
-source $ZDOTDIR/forgit/forgit.plugin.zsh
-
 # Vim mode improvements
 export KEYTIMEOUT=10
 bindkey -M viins 'jk' vi-cmd-mode
