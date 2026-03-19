@@ -41,7 +41,7 @@ export DO_NOT_TRACK=1
 export PYRIGHT_PYTHON_IGNORE_WARNINGS=1
 
 # Lazy-loading completion
-if [ $commands[pip] ]; then
+if (( $+commands[pip] )); then
   pip() {
     unfunction "$0"
     eval "$(pip completion --zsh)"
@@ -49,7 +49,7 @@ if [ $commands[pip] ]; then
   }
 fi
 
-if [ $commands[jj] ]; then
+if (( $+commands[jj] )); then
   jj() {
     unfunction "$0"
     source <(COMPLETE=zsh jj)
@@ -58,7 +58,7 @@ if [ $commands[jj] ]; then
 fi
 
 
-if [ $commands[uv] ]; then
+if (( $+commands[uv] )); then
   uv() {
     unfunction "$0"
     eval "$(uv --generate-shell-completion zsh)"
@@ -66,11 +66,17 @@ if [ $commands[uv] ]; then
   }
 fi
 
-eval "$(capbak completion)"
-eval "$(mimir completion)"
-eval "$(search completion)"
+if (( $+commands[capbak] )); then
+  eval "$(capbak completion)"
+fi
+if (( $+commands[mimir] )); then
+  eval "$(mimir completion)"
+fi
+if (( $+commands[search] )); then
+  eval "$(search completion)"
+fi
 
-if [ $commands[kubectl] ]; then
+if (( $+commands[kubectl] )); then
   kubectl() {
     unfunction "$0"
     eval "$(kubectl completion zsh)"
