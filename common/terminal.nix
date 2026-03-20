@@ -95,6 +95,13 @@
     tmux = {
       enable = true;
       package = pkgs.tmux;
+      shortcut = "Space";
+      baseIndex = 1;
+      escapeTime = 0;
+      historyLimit = 100000;
+      focusEvents = true;
+      keyMode = "vi";
+      terminal = "screen-256color";
       extraConfig = builtins.concatStringsSep "\n" [
         (lib.strings.fileContents ../tmux.conf)
       ];
