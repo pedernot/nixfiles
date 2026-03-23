@@ -48,7 +48,6 @@
         mutt = "neomutt";
         startx = "startx $XINITRC";
         tmux = "tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf";
-        mbsync = "mbsync -c \"$XDG_CONFIG_HOME\"/isync/mbsyncrc";
         abook = "abook --config \"$XDG_CONFIG_HOME\"/abook/abookrc --datafile \"$XDG_DATA_HOME\"/notes/addressbook";
         wget = "wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'";
 
