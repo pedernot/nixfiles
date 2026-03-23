@@ -3,7 +3,167 @@
   config,
   lib,
   ...
-}: {
+}: let
+  defaultFolders = {
+    inbox = "inbox";
+    sent = "sent";
+    drafts = "drafts";
+  };
+
+  commonMailAccount = {
+    realName = "Peder Notto Galteland";
+    msmtp.enable = true;
+    notmuch = {
+      enable = true;
+      neomutt.enable = false;
+    };
+  };
+
+  mkNeomuttAccount = {
+    statusColor,
+    syncGroup,
+  }: {
+    enable = true;
+    sendMailCommand = "msmtp";
+    showDefaultMailbox = false;
+    extraConfig = ''
+      unmailboxes *
+      mailboxes +inbox \
+                +drafts \
+                +sent \
+                +archive
+
+      color status ${statusColor} color18
+      macro index,pager \cs "<shell-escape>mbsync -V -c ~/.config/isyncrc ${syncGroup}<enter>"
+    '';
+  };
+
+  mkDefaultSyncChannel = patterns: {
+    inherit patterns;
+    extraConfig.SyncState = "*";
+  };
+
+  mkNearSyncChannel = {
+    farPattern,
+    nearPattern,
+  }: {
+    inherit farPattern nearPattern;
+    extraConfig = {
+      Create = "Near";
+      SyncState = "*";
+    };
+  };
+
+  mkGroupedMbsync = {
+    syncGroup,
+    channels,
+  }: {
+    enable = true;
+    groups.${syncGroup}.channels = channels;
+  };
+
+  mkStartTlsSmtp = {
+    host ? null,
+    port ? 587,
+  }:
+    {
+      inherit port;
+      tls.useStartTls = true;
+    }
+    // lib.optionalAttrs (host != null) {inherit host;};
+
+  mkGmailMbsync = {
+    syncGroup,
+    patterns,
+  }:
+    mkGroupedMbsync {
+      inherit syncGroup;
+      channels = {
+        default = mkDefaultSyncChannel patterns;
+        sent = mkNearSyncChannel {
+          farPattern = "[Gmail]/Sent Mail";
+          nearPattern = "sent";
+        };
+        drafts = mkNearSyncChannel {
+          farPattern = "[Gmail]/Drafts";
+          nearPattern = "drafts";
+        };
+        archive = mkNearSyncChannel {
+          farPattern = "[Gmail]/All Mail";
+          nearPattern = "archive";
+        };
+      };
+    };
+
+  mkGmailAccount = {
+    address,
+    userName,
+    passwordCommand,
+    maildirPath,
+    syncGroup,
+    statusColor,
+    patterns,
+    primary ? false,
+  }:
+    commonMailAccount
+    // {
+      inherit primary address userName;
+      flavor = "gmail.com";
+      passwordCommand = ["pass" passwordCommand];
+      maildir.path = maildirPath;
+      folders = defaultFolders;
+      smtp = mkStartTlsSmtp {};
+      mbsync = mkGmailMbsync {
+        inherit syncGroup patterns;
+      };
+      neomutt = mkNeomuttAccount {
+        inherit statusColor syncGroup;
+      };
+    };
+
+  mkPurelymailAccount = {
+    syncGroup,
+    statusColor,
+  }:
+    commonMailAccount
+    // {
+      flavor = "plain";
+      address = "peder.notto@galte.land";
+      userName = "peder.notto@galte.land";
+      passwordCommand = ["pass" "purelymail"];
+      maildir.path = "purelymail";
+      folders = defaultFolders;
+      imap = {
+        host = "imap.purelymail.com";
+        port = 993;
+        tls.enable = true;
+      };
+      smtp = mkStartTlsSmtp {
+        host = "smtp.purelymail.com";
+      };
+      mbsync = mkGroupedMbsync {
+        inherit syncGroup;
+        channels = {
+          default = mkDefaultSyncChannel ["INBOX"];
+          sent = mkNearSyncChannel {
+            farPattern = "Sent";
+            nearPattern = "sent";
+          };
+          drafts = mkNearSyncChannel {
+            farPattern = "Drafts";
+            nearPattern = "drafts";
+          };
+          archive = mkNearSyncChannel {
+            farPattern = "Trash";
+            nearPattern = "archive";
+          };
+        };
+      };
+      neomutt = mkNeomuttAccount {
+        inherit statusColor syncGroup;
+      };
+    };
+in {
   home.packages = with pkgs; [
   ];
 
@@ -11,233 +171,33 @@
     maildirBasePath = "${config.xdg.dataHome}/mail";
 
     accounts = {
-      gmail-tsl = {
+      gmail-tsl = mkGmailAccount {
         primary = true;
-        flavor = "gmail.com";
         address = "peder.galteland@softwarelab.no";
-        realName = "Peder Notto Galteland";
         userName = "peder.galteland@softwarelab.no";
-        passwordCommand = ["pass" "gmail-tsl-app-pw"];
-        maildir.path = "gmail-tsl";
-        folders = {
-          inbox = "inbox";
-          sent = "sent";
-          drafts = "drafts";
-        };
-        smtp = {
-          port = 587;
-          tls.useStartTls = true;
-        };
-        mbsync = {
-          enable = true;
-          groups.sync-gmail-tsl.channels = {
-            default = {
-              patterns = [
-                "INBOX"
-                "jira"
-              ];
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            sent = {
-              farPattern = "[Gmail]/Sent Mail";
-              nearPattern = "sent";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            drafts = {
-              farPattern = "[Gmail]/Drafts";
-              nearPattern = "drafts";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            archive = {
-              farPattern = "[Gmail]/All Mail";
-              nearPattern = "archive";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-          };
-        };
-        msmtp.enable = true;
-        neomutt = {
-          enable = true;
-          sendMailCommand = "msmtp";
-          showDefaultMailbox = false;
-          extraConfig = ''
-            unmailboxes *
-            mailboxes +inbox \
-                      +drafts \
-                      +sent \
-                      +archive
-
-            color status color6 color18
-            macro index,pager \cs "<shell-escape>mbsync -V -c ~/.config/isyncrc sync-gmail-tsl<enter>"
-          '';
-        };
-        notmuch = {
-          enable = true;
-          neomutt.enable = false;
-        };
+        passwordCommand = "gmail-tsl-app-pw";
+        maildirPath = "gmail-tsl";
+        syncGroup = "sync-gmail-tsl";
+        patterns = [
+          "INBOX"
+          "jira"
+        ];
+        statusColor = "color6";
       };
 
-      gmail-personal = {
-        flavor = "gmail.com";
+      gmail-personal = mkGmailAccount {
         address = "pederng@gmail.com";
-        realName = "Peder Notto Galteland";
         userName = "pederng@gmail.com";
-        passwordCommand = ["pass" "gmail-personal-app-pw"];
-        maildir.path = "gmail-personal";
-        folders = {
-          inbox = "inbox";
-          sent = "sent";
-          drafts = "drafts";
-        };
-        smtp = {
-          port = 587;
-          tls.useStartTls = true;
-        };
-        mbsync = {
-          enable = true;
-          groups.sync-gmail-personal.channels = {
-            default = {
-              patterns = ["INBOX"];
-              extraConfig.SyncState = "*";
-            };
-            sent = {
-              farPattern = "[Gmail]/Sent Mail";
-              nearPattern = "sent";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            drafts = {
-              farPattern = "[Gmail]/Drafts";
-              nearPattern = "drafts";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            archive = {
-              farPattern = "[Gmail]/All Mail";
-              nearPattern = "archive";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-          };
-        };
-        msmtp.enable = true;
-        neomutt = {
-          enable = true;
-          sendMailCommand = "msmtp";
-          showDefaultMailbox = false;
-          extraConfig = ''
-            unmailboxes *
-            mailboxes +inbox \
-                      +drafts \
-                      +sent \
-                      +archive
-
-            color status green color18
-            macro index,pager \cs "<shell-escape>mbsync -V -c ~/.config/isyncrc sync-gmail-personal<enter>"
-          '';
-        };
-        notmuch = {
-          enable = true;
-          neomutt.enable = false;
-        };
+        passwordCommand = "gmail-personal-app-pw";
+        maildirPath = "gmail-personal";
+        syncGroup = "sync-gmail-personal";
+        patterns = ["INBOX"];
+        statusColor = "green";
       };
 
-      purelymail = {
-        flavor = "plain";
-        address = "peder.notto@galte.land";
-        realName = "Peder Notto Galteland";
-        userName = "peder.notto@galte.land";
-        passwordCommand = ["pass" "purelymail"];
-        maildir.path = "purelymail";
-        folders = {
-          inbox = "inbox";
-          sent = "sent";
-          drafts = "drafts";
-        };
-        imap = {
-          host = "imap.purelymail.com";
-          port = 993;
-          tls.enable = true;
-        };
-        smtp = {
-          host = "smtp.purelymail.com";
-          port = 587;
-          tls = {
-            enable = true;
-            useStartTls = true;
-          };
-        };
-        mbsync = {
-          enable = true;
-          groups.sync-purelymail.channels = {
-            default = {
-              patterns = ["INBOX"];
-              extraConfig.SyncState = "*";
-            };
-            sent = {
-              farPattern = "Sent";
-              nearPattern = "sent";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            drafts = {
-              farPattern = "Drafts";
-              nearPattern = "drafts";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-            archive = {
-              farPattern = "Trash";
-              nearPattern = "archive";
-              extraConfig = {
-                Create = "Near";
-                SyncState = "*";
-              };
-            };
-          };
-        };
-        msmtp.enable = true;
-        neomutt = {
-          enable = true;
-          sendMailCommand = "msmtp";
-          showDefaultMailbox = false;
-          extraConfig = ''
-            unmailboxes *
-            mailboxes +inbox \
-                      +drafts \
-                      +sent \
-                      +archive
-
-            color status magenta color18
-            macro index,pager \cs "<shell-escape>mbsync -V -c ~/.config/isyncrc sync-purelymail<enter>"
-          '';
-        };
-        notmuch = {
-          enable = true;
-          neomutt.enable = false;
-        };
+      purelymail = mkPurelymailAccount {
+        syncGroup = "sync-purelymail";
+        statusColor = "magenta";
       };
     };
   };
