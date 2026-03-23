@@ -125,6 +125,8 @@
       ];
     };
 
+    btop.enable = true;
+
     smug = {
       enable = true;
       projects = {

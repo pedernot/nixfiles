@@ -21,7 +21,6 @@
     awscli2
     bat
     brightnessctl
-    btop
     chromium
     claude-code
     codex
