@@ -38,9 +38,18 @@
     '';
   };
 
-  mkDefaultSyncChannel = patterns: {
+  mkDefaultSyncChannel = {
+    patterns,
+    createNear ? false,
+  }: {
     inherit patterns;
-    extraConfig.SyncState = "*";
+    extraConfig =
+      {
+        SyncState = "*";
+      }
+      // lib.optionalAttrs createNear {
+        Create = "Near";
+      };
   };
 
   mkNearSyncChannel = {
@@ -68,7 +77,10 @@
   }:
     {
       inherit port;
-      tls.useStartTls = true;
+      tls = {
+        enable = true;
+        useStartTls = true;
+      };
     }
     // lib.optionalAttrs (host != null) {inherit host;};
 
@@ -79,7 +91,10 @@
     mkGroupedMbsync {
       inherit syncGroup;
       channels = {
-        default = mkDefaultSyncChannel patterns;
+        default = mkDefaultSyncChannel {
+          inherit patterns;
+          createNear = true;
+        };
         sent = mkNearSyncChannel {
           farPattern = "[Gmail]/Sent Mail";
           nearPattern = "sent";
@@ -144,7 +159,9 @@
       mbsync = mkGroupedMbsync {
         inherit syncGroup;
         channels = {
-          default = mkDefaultSyncChannel ["INBOX"];
+          default = mkDefaultSyncChannel {
+            patterns = ["INBOX"];
+          };
           sent = mkNearSyncChannel {
             farPattern = "Sent";
             nearPattern = "sent";
@@ -164,9 +181,6 @@
       };
     };
 in {
-  home.packages = with pkgs; [
-  ];
-
   accounts.email = {
     maildirBasePath = "${config.xdg.dataHome}/mail";
 
