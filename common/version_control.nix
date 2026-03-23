@@ -41,6 +41,7 @@
     git = {
       enable = true;
       package = pkgs.git;
+      signing.format = "openpgp";
       settings = {
         user = {
           name = "Peder Notto Galteland";

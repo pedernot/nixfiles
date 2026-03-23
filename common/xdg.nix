@@ -11,6 +11,7 @@ _: {
       videos = "$HOME/docs";
       templates = "$HOME/docs";
       publicShare = "$HOME/docs";
+      setSessionVariables = true;
     };
     mimeApps = {
       enable = true;
