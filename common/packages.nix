@@ -19,7 +19,6 @@
     ansible-lint
     ast-grep
     awscli2
-    bat
     brightnessctl
     chromium
     claude-code

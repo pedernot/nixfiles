@@ -17,6 +17,7 @@ _: {
         opacity.enable = false;
       };
       tmux.enable = true;
+      bat.enable = true;
       btop.enable = true;
       fzf.enable = true;
       starship.enable = true;
