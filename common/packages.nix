@@ -94,7 +94,6 @@
     xh
     yq
     yt-dlp
-    zathura
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
   ];
 }

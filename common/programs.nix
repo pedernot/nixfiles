@@ -15,6 +15,7 @@ _: {
   ];
   programs = {
     home-manager.enable = true;
+    zathura.enable = true;
     nh = {
       enable = true;
       clean = {
