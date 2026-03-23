@@ -6,11 +6,14 @@ NixOS/Home Manager dotfiles repository using Nix flakes for declarative system c
 
 - `flake.nix` - Main flake (defines `lapping` work laptop and `nixos` personal laptop configs)
 - `common/` - Shared home-manager modules (packages.nix, programs.nix, terminal.nix, etc.)
+- `common/email.nix` - Shared email stack (accounts.email, mbsync, msmtp, notmuch, neomutt)
 - `lapping/` - Work laptop configuration
 - `nixos/` - Personal laptop configuration
 - `nvim/` - Neovim config (Lua): `init.lua`, `lua/config/`, `lua/plugins/`
 - `zsh/` - Zsh configuration files
 - `common/scripts.nix` - Custom script wrappers packaged via Nix
+- `THEMING.md` - Stylix ownership and theming workflow
+- `EMAIL.md` - Mail stack ownership and generated config layout
 - `skills/` - AI agent skills documentation
 
 ## Build/Deploy Commands
@@ -142,6 +145,12 @@ See `skills/jj-workspace/SKILL.md` for detailed workspace workflow.
 ### Adding a New Package
 
 Edit `common/packages.nix`, add to `home.packages` list.
+
+### Email Configuration
+
+- Shared mail setup lives in `common/email.nix`
+- Prefer `accounts.email` and Home Manager program modules over raw config files
+- Keep the remaining mutt fragments only for shared UI/behavior (`mutt/bindings`, `mutt/colors`, `mutt/gpg.rc`, `mutt/mailcap`)
 
 ### Adding a New Neovim Plugin
 

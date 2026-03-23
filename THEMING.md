@@ -20,9 +20,12 @@ that are verified against this config:
 
 - foot (colors only; fonts/inputs/opacity explicitly controlled)
 - tmux
+- bat
+- btop
 - fzf
 - starship
 - yazi
+- zathura
 
 ## App-specific notes
 
