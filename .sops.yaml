@@ -1,0 +1,7 @@
+keys:
+  - &peder_yubikey 227FFD7C7D31D9B3E931AE634980821A221FE5B1
+creation_rules:
+  - path_regex: secrets/[^/]+\.ya?ml$
+    key_groups:
+      - pgp:
+          - *peder_yubikey

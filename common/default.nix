@@ -3,6 +3,7 @@
     ./packages.nix
     ./scripts.nix
     ./programs.nix
+    ./secrets.nix
     ./zsh-completions.nix
     ./xdg.nix
     ./sway.nix
