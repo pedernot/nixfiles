@@ -208,6 +208,143 @@ in {
     enable = true;
     editor = "nvim";
     sort = "threads";
+    sidebar = {
+      enable = true;
+      width = 32;
+    };
+    binds = [
+      {
+        map = ["index"];
+        key = "-";
+        action = "collapse-all";
+      }
+      {
+        map = [
+          "index"
+          "pager"
+        ];
+        key = "\\`";
+        action = "next-unread";
+      }
+      {
+        map = ["index"];
+        key = "<space>";
+        action = "collapse-thread";
+      }
+      {
+        map = [
+          "attach"
+          "index"
+        ];
+        key = "g";
+        action = "first-entry";
+      }
+      {
+        map = [
+          "attach"
+          "index"
+        ];
+        key = "G";
+        action = "last-entry";
+      }
+      {
+        map = ["index"];
+        key = "R";
+        action = "group-reply";
+      }
+      {
+        map = ["editor"];
+        key = "<Tab>";
+        action = "complete-query";
+      }
+      {
+        map = ["pager"];
+        key = "g";
+        action = "top";
+      }
+      {
+        map = ["pager"];
+        key = "G";
+        action = "bottom";
+      }
+      {
+        map = ["pager"];
+        key = "p";
+        action = "previous-subthread";
+      }
+      {
+        map = ["pager"];
+        key = "n";
+        action = "next-subthread";
+      }
+      {
+        map = ["pager"];
+        key = "R";
+        action = "group-reply";
+      }
+      {
+        map = ["pager"];
+        key = "J";
+        action = "next-line";
+      }
+      {
+        map = ["pager"];
+        key = "K";
+        action = "previous-line";
+      }
+      {
+        map = ["attach"];
+        key = "<return>";
+        action = "view-mailcap";
+      }
+    ];
+    macros = [
+      {
+        map = [
+          "index"
+          "pager"
+        ];
+        key = "\\cj";
+        action = "<sidebar-next><sidebar-open>";
+      }
+      {
+        map = [
+          "index"
+          "pager"
+        ];
+        key = "\\ck";
+        action = "<sidebar-prev><sidebar-open>";
+      }
+      {
+        map = ["index"];
+        key = "\\Cr";
+        action = "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>";
+      }
+      {
+        map = [
+          "index"
+          "pager"
+        ];
+        key = "\\cb";
+        action = "<pipe-message> urlscan<Enter>";
+      }
+      {
+        map = [
+          "attach"
+          "compose"
+        ];
+        key = "\\cb";
+        action = "<pipe-entry> urlscan<Enter>";
+      }
+      {
+        map = [
+          "index"
+          "pager"
+        ];
+        key = "a";
+        action = "<pipe-message>abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --add-email-quiet<return>";
+      }
+    ];
     settings = {
       use_from = "yes";
       envelope_from = "yes";
@@ -243,10 +380,11 @@ in {
       alternative_order text/plain text/enriched text/html
       auto_view text/html
 
-      source ~/.config/mutt/bindings
       source ~/.config/mutt/colors
-      source ~/.config/mutt/sidebar
       source ~/.config/mutt/gpg.rc
+      source ~/.config/mutt/bindings
+
+      color sidebar_new color221 color233
 
       macro index,pager 1 "<change-folder> =../gmail-tsl/inbox<enter>"
       macro index,pager 2 "<change-folder> =../purelymail/inbox<enter>"
@@ -286,7 +424,6 @@ in {
   xdg.configFile = {
     "mutt/bindings".source = ../mutt/bindings;
     "mutt/colors".source = ../mutt/colors;
-    "mutt/sidebar".source = ../mutt/sidebar;
     "mutt/gpg.rc".source = ../mutt/gpg.rc;
     "mutt/mailcap".source = ../mutt/mailcap;
   };

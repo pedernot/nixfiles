@@ -1,32 +1,4 @@
 # vim: ft=muttrc
 
-bind index - collapse-all
-bind index,pager \` next-unread
-bind index <space> collapse-thread
-macro index,pager \cj <sidebar-next><sidebar-open>
-macro index,pager \ck <sidebar-prev><sidebar-open>
-# bind index,pager \cj sidebar-next
-# bind index,pager \ck sidebar-prev
-# bind index,pager \co sidebar-open
-bind attach,index g first-entry
-bind attach,index G last-entry
-bind index R group-reply
-
-macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
-macro index,pager \cb "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
-macro attach,compose \cb "<pipe-entry> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+# Kept raw because the shell pipeline is clearer here than in HM macros.
 macro index L "<enter-command>unset wait_key<enter><shell-escape>read -p 'notmuch query: ' x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;chomp@a;s/\^id:// for@a;$,=\"|\";print@a'\`\"<enter>" "show only messages matching a notmuch pattern"
-# macro index a "<limit>all\n" "show all messages (undo limit)"
-# macro index A "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all new as read"
-macro index,pager a "<pipe-message>abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --add-email-quiet<return>" "Add this sender to Abook"
-bind editor <Tab> complete-query
-
-bind pager g top
-bind pager G bottom
-bind pager p previous-subthread
-bind pager n next-subthread
-bind pager R group-reply
-bind pager J next-line
-bind pager K previous-line
-
-bind attach <return> view-mailcap
