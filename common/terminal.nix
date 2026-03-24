@@ -218,7 +218,7 @@
               name = "email";
               root = ".";
               layout = "even-horizontal";
-              commands = ["mbsync -a; mutt"];
+              commands = ["mbsync -a; notmuch new; mutt"];
             }
           ];
         };
