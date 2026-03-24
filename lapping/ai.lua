@@ -2,8 +2,28 @@ return {
 	{
 		"zbirenbaum/copilot.lua",
 		config = function()
-			require("copilot").setup()
+			require("copilot").setup({
+				suggestion = {
+					enabled = true,
+					auto_trigger = true,
+					accept = "<M-l>",
+				},
+				nes = {
+					enabled = true,
+					keymap = {
+						accept_and_goto = "<M-u>",
+						accept = false,
+						dismiss = "<Esc>",
+					},
+				},
+			})
 		end,
+		dependencies = {
+			"copilotlsp-nvim/copilot-lsp",
+			config = function()
+				vim.g.copilot_nes_debounce = 500
+			end,
+		},
 	},
 	{
 		"johnseth97/codex.nvim",
