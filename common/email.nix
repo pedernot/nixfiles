@@ -216,223 +216,225 @@ in {
     };
   };
 
-  programs.mbsync.enable = true;
+  programs = {
+    mbsync.enable = true;
 
-  programs.neomutt = {
-    enable = true;
-    editor = "nvim";
-    sort = "threads";
-    sidebar = {
+    neomutt = {
       enable = true;
-      width = 32;
+      editor = "nvim";
+      sort = "threads";
+      sidebar = {
+        enable = true;
+        width = 32;
+      };
+      binds = [
+        {
+          map = ["index"];
+          key = "-";
+          action = "collapse-all";
+        }
+        {
+          map = [
+            "index"
+            "pager"
+          ];
+          key = "\\`";
+          action = "next-unread";
+        }
+        {
+          map = ["index"];
+          key = "<space>";
+          action = "collapse-thread";
+        }
+        {
+          map = [
+            "attach"
+            "index"
+          ];
+          key = "g";
+          action = "first-entry";
+        }
+        {
+          map = [
+            "attach"
+            "index"
+          ];
+          key = "G";
+          action = "last-entry";
+        }
+        {
+          map = ["index"];
+          key = "R";
+          action = "group-reply";
+        }
+        {
+          map = ["editor"];
+          key = "<Tab>";
+          action = "complete-query";
+        }
+        {
+          map = ["pager"];
+          key = "g";
+          action = "top";
+        }
+        {
+          map = ["pager"];
+          key = "G";
+          action = "bottom";
+        }
+        {
+          map = ["pager"];
+          key = "p";
+          action = "previous-subthread";
+        }
+        {
+          map = ["pager"];
+          key = "n";
+          action = "next-subthread";
+        }
+        {
+          map = ["pager"];
+          key = "R";
+          action = "group-reply";
+        }
+        {
+          map = ["pager"];
+          key = "J";
+          action = "next-line";
+        }
+        {
+          map = ["pager"];
+          key = "K";
+          action = "previous-line";
+        }
+        {
+          map = ["attach"];
+          key = "<return>";
+          action = "view-mailcap";
+        }
+      ];
+      macros = [
+        {
+          map = [
+            "index"
+            "pager"
+          ];
+          key = "\\cj";
+          action = "<sidebar-next><sidebar-open>";
+        }
+        {
+          map = [
+            "index"
+            "pager"
+          ];
+          key = "\\ck";
+          action = "<sidebar-prev><sidebar-open>";
+        }
+        {
+          map = ["index"];
+          key = "\\Cr";
+          action = "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>";
+        }
+        {
+          map = [
+            "index"
+            "pager"
+          ];
+          key = "\\cb";
+          action = "<pipe-message> urlscan<Enter>";
+        }
+        {
+          map = [
+            "attach"
+            "compose"
+          ];
+          key = "\\cb";
+          action = "<pipe-entry> urlscan<Enter>";
+        }
+        {
+          map = [
+            "index"
+            "pager"
+          ];
+          key = "a";
+          action = "<pipe-message>abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --add-email-quiet<return>";
+        }
+      ];
+      settings = {
+        use_from = "yes";
+        envelope_from = "yes";
+        move = "no";
+        delete = "yes";
+        quit = "yes";
+        charset = "utf-8";
+        record = "";
+        quote_regexp = ''"^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"'';
+        sort_aux = "last-date-received";
+        date_format = ''"%m/%d"'';
+        index_format = ''"[%Z]  %D  %-20.20F  %s"'';
+        uncollapse_jump = "yes";
+        sort_re = "yes";
+        reply_regexp = ''"^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"'';
+        pager_index_lines = "30";
+        pager_context = "3";
+        pager_stop = "yes";
+        menu_scroll = "yes";
+        tilde = "yes";
+        mailcap_path = ''"~/.config/mutt/mailcap"'';
+        sleep_time = "0";
+        query_command = ''"abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --mutt-query '%s'"'';
+      };
+      extraConfig = ''
+        unset confirmappend
+        unset markers
+
+        set header_cache = "${config.xdg.cacheHome}/mutt/headers"
+        set message_cachedir = "${config.xdg.cacheHome}/mutt/bodies"
+        set certificate_file = "${config.xdg.dataHome}/mutt/certificates"
+
+        alternative_order text/plain text/enriched text/html
+        auto_view text/html
+
+        source ~/.config/mutt/colors
+        source ~/.config/mutt/gpg.rc
+        source ~/.config/mutt/bindings
+
+        color sidebar_new color221 color233
+
+        macro index,pager 1 "<change-folder> =../gmail-tsl/inbox<enter>"
+        macro index,pager 2 "<change-folder> =../purelymail/inbox<enter>"
+        macro index,pager 3 "<change-folder> =../gmail-personal/inbox<enter>"
+      '';
     };
-    binds = [
-      {
-        map = ["index"];
-        key = "-";
-        action = "collapse-all";
-      }
-      {
-        map = [
-          "index"
-          "pager"
-        ];
-        key = "\\`";
-        action = "next-unread";
-      }
-      {
-        map = ["index"];
-        key = "<space>";
-        action = "collapse-thread";
-      }
-      {
-        map = [
-          "attach"
-          "index"
-        ];
-        key = "g";
-        action = "first-entry";
-      }
-      {
-        map = [
-          "attach"
-          "index"
-        ];
-        key = "G";
-        action = "last-entry";
-      }
-      {
-        map = ["index"];
-        key = "R";
-        action = "group-reply";
-      }
-      {
-        map = ["editor"];
-        key = "<Tab>";
-        action = "complete-query";
-      }
-      {
-        map = ["pager"];
-        key = "g";
-        action = "top";
-      }
-      {
-        map = ["pager"];
-        key = "G";
-        action = "bottom";
-      }
-      {
-        map = ["pager"];
-        key = "p";
-        action = "previous-subthread";
-      }
-      {
-        map = ["pager"];
-        key = "n";
-        action = "next-subthread";
-      }
-      {
-        map = ["pager"];
-        key = "R";
-        action = "group-reply";
-      }
-      {
-        map = ["pager"];
-        key = "J";
-        action = "next-line";
-      }
-      {
-        map = ["pager"];
-        key = "K";
-        action = "previous-line";
-      }
-      {
-        map = ["attach"];
-        key = "<return>";
-        action = "view-mailcap";
-      }
-    ];
-    macros = [
-      {
-        map = [
-          "index"
-          "pager"
-        ];
-        key = "\\cj";
-        action = "<sidebar-next><sidebar-open>";
-      }
-      {
-        map = [
-          "index"
-          "pager"
-        ];
-        key = "\\ck";
-        action = "<sidebar-prev><sidebar-open>";
-      }
-      {
-        map = ["index"];
-        key = "\\Cr";
-        action = "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>";
-      }
-      {
-        map = [
-          "index"
-          "pager"
-        ];
-        key = "\\cb";
-        action = "<pipe-message> urlscan<Enter>";
-      }
-      {
-        map = [
-          "attach"
-          "compose"
-        ];
-        key = "\\cb";
-        action = "<pipe-entry> urlscan<Enter>";
-      }
-      {
-        map = [
-          "index"
-          "pager"
-        ];
-        key = "a";
-        action = "<pipe-message>abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --add-email-quiet<return>";
-      }
-    ];
-    settings = {
-      use_from = "yes";
-      envelope_from = "yes";
-      move = "no";
-      delete = "yes";
-      quit = "yes";
-      charset = "utf-8";
-      record = "";
-      quote_regexp = ''"^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"'';
-      sort_aux = "last-date-received";
-      date_format = ''"%m/%d"'';
-      index_format = ''"[%Z]  %D  %-20.20F  %s"'';
-      uncollapse_jump = "yes";
-      sort_re = "yes";
-      reply_regexp = ''"^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"'';
-      pager_index_lines = "30";
-      pager_context = "3";
-      pager_stop = "yes";
-      menu_scroll = "yes";
-      tilde = "yes";
-      mailcap_path = ''"~/.config/mutt/mailcap"'';
-      sleep_time = "0";
-      query_command = ''"abook --config ~/.config/abook/abookrc --datafile ~/.local/share/notes/addressbook --mutt-query '%s'"'';
+
+    notmuch = {
+      enable = true;
+      new.tags = [
+        "unread"
+        "inbox"
+      ];
+      search.excludeTags = [
+        "deleted"
+        "spam"
+      ];
+      maildir.synchronizeFlags = true;
+      extraConfig.user = {
+        name = "Peder Notto Galteland";
+        primary_email = "peder.notto@galte.land";
+        other_email = "peder.galteland@softwarelab.no;pederng@gmail.com;";
+      };
     };
-    extraConfig = ''
-      unset confirmappend
-      unset markers
 
-      set header_cache = "${config.xdg.cacheHome}/mutt/headers"
-      set message_cachedir = "${config.xdg.cacheHome}/mutt/bodies"
-      set certificate_file = "${config.xdg.dataHome}/mutt/certificates"
-
-      alternative_order text/plain text/enriched text/html
-      auto_view text/html
-
-      source ~/.config/mutt/colors
-      source ~/.config/mutt/gpg.rc
-      source ~/.config/mutt/bindings
-
-      color sidebar_new color221 color233
-
-      macro index,pager 1 "<change-folder> =../gmail-tsl/inbox<enter>"
-      macro index,pager 2 "<change-folder> =../purelymail/inbox<enter>"
-      macro index,pager 3 "<change-folder> =../gmail-personal/inbox<enter>"
-    '';
-  };
-
-  programs.notmuch = {
-    enable = true;
-    new.tags = [
-      "unread"
-      "inbox"
-    ];
-    search.excludeTags = [
-      "deleted"
-      "spam"
-    ];
-    maildir.synchronizeFlags = true;
-    extraConfig.user = {
-      name = "Peder Notto Galteland";
-      primary_email = "peder.notto@galte.land";
-      other_email = "peder.galteland@softwarelab.no;pederng@gmail.com;";
+    msmtp = {
+      enable = true;
+      configContent = lib.mkBefore ''
+        defaults
+        auth on
+        tls on
+        tls_trust_file ${config.accounts.email.certificatesFile}
+        logfile ${config.xdg.cacheHome}/msmtp.log
+      '';
     };
-  };
-
-  programs.msmtp = {
-    enable = true;
-    configContent = lib.mkBefore ''
-      defaults
-      auth on
-      tls on
-      tls_trust_file ${config.accounts.email.certificatesFile}
-      logfile ${config.xdg.cacheHome}/msmtp.log
-    '';
   };
 
   xdg.configFile = {
