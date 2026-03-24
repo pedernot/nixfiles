@@ -115,6 +115,7 @@
         "shell.nix"
         ".direnv"
         ".opencode"
+        ".claude"
       ];
     };
 
