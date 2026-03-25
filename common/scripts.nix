@@ -55,10 +55,54 @@
       fi
     '';
   };
+  sp = pkgs.writeShellApplication {
+    name = "sp";
+    text = ''
+      #!/usr/bin/env -S bash -e
+
+      CMD=$1
+
+      execute() {
+        cmd=$1
+        dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
+          /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player."$cmd" \
+          > /dev/null
+      }
+
+      get() {
+        dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
+          /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get \
+          string:org.mpris.MediaPlayer2.Player string:"$1"
+      }
+
+
+      case $CMD in
+        play)
+          execute PlayPause
+          ;;
+        pause)
+          execute Pause
+          ;;
+        next)
+          execute Next
+          ;;
+        prev)
+          execute Previous
+          ;;
+        current)
+          get Metadata
+          ;;
+        *)
+          execute PlayPause
+          ;;
+      esac
+    '';
+  };
 in {
   home.packages = [
     fzfmenu
     fzflaunch
     fpass
+    sp
   ];
 }
