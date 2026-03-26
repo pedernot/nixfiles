@@ -58,16 +58,13 @@
   sm = pkgs.writeShellApplication {
     name = "sm";
     text = ''
-      #!/usr/bin/env -S bash -e
       smug "$(smug list | fzf --height 50% --reverse)"
     '';
   };
   sp = pkgs.writeShellApplication {
     name = "sp";
     text = ''
-      #!/usr/bin/env -S bash -e
-
-      CMD=$1
+      CMD=''${1:-}
 
       execute() {
         cmd=$1
