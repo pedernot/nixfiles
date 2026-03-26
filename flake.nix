@@ -16,10 +16,6 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = {
@@ -41,7 +37,6 @@
             home-manager = {
               useUserPackages = true;
               extraSpecialArgs = {inherit inputs;};
-              sharedModules = [inputs.sops-nix.homeManagerModules.sops];
               users.peder = import ./lapping/home.nix;
             };
           }
@@ -58,7 +53,6 @@
             home-manager = {
               useUserPackages = true;
               extraSpecialArgs = {inherit inputs;};
-              sharedModules = [inputs.sops-nix.homeManagerModules.sops];
               users.peder = import ./heisenberg/home.nix;
             };
           }
@@ -75,7 +69,6 @@
             home-manager = {
               useUserPackages = true;
               extraSpecialArgs = {inherit inputs;};
-              sharedModules = [inputs.sops-nix.homeManagerModules.sops];
               users.peder = import ./nixos/home.nix;
             };
           }
