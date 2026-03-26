@@ -16,6 +16,10 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -36,6 +40,7 @@
           {
             home-manager = {
               useUserPackages = true;
+              sharedModules = [inputs.nvf.homeManagerModules.default];
               extraSpecialArgs = {inherit inputs;};
               users.peder = import ./lapping/home.nix;
             };
@@ -52,6 +57,7 @@
           {
             home-manager = {
               useUserPackages = true;
+              sharedModules = [inputs.nvf.homeManagerModules.default];
               extraSpecialArgs = {inherit inputs;};
               users.peder = import ./heisenberg/home.nix;
             };
@@ -68,6 +74,7 @@
           {
             home-manager = {
               useUserPackages = true;
+              sharedModules = [inputs.nvf.homeManagerModules.default];
               extraSpecialArgs = {inherit inputs;};
               users.peder = import ./nixos/home.nix;
             };

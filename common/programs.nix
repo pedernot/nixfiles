@@ -8,7 +8,7 @@ _: {
     ./ssh.nix
     ./version_control.nix
     ./terminal.nix
-    ./nvim.nix
+    ./nvf.nix
     ./gpg.nix
     ./email.nix
     ./rss.nix
