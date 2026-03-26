@@ -18,6 +18,7 @@
     preferXdgDirectories = true;
     sessionPath = ["$HOME/.local/bin"];
     sessionVariables = {
+      EDITOR = "nvim";
       COMPOSE_BAKE = "true";
       DO_NOT_TRACK = "1";
       KUBECONFIG = "$HOME/.config/kube/config.yaml";

@@ -22,6 +22,9 @@ _: {
       starship.enable = true;
       yazi.enable = true;
       zathura.enable = true;
+      # nvf theming via stylix uses base16-nvim which maps colors differently
+      # than tinted-vim. To switch, enable this and remove tinted-vim from nvf.nix.
+      # nvf.enable = true;
     };
   };
 }
