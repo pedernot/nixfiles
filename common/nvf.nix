@@ -67,8 +67,11 @@
           yaml
           toml
           json
+          sql
         ];
       };
+
+      additionalRuntimePaths = [./nvim-queries];
 
       # Phase 8: Telescope
       # telescope-undo loaded via extensions; <C-p><C-h> (oldfiles) and
