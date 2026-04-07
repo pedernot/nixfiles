@@ -58,7 +58,6 @@
     lynx
     mkcert
     nixd
-    nodePackages.bash-language-server
     nodejs
     openssl
     ormolu
