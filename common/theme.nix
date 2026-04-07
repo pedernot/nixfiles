@@ -13,7 +13,6 @@ _: {
         enable = true;
         colors.enable = true;
         fonts.enable = false;
-        opacity.enable = false;
       };
       tmux.enable = true;
       bat.enable = true;
