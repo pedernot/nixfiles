@@ -85,6 +85,7 @@
             packages = [pkgs.vimPlugins.telescope-undo-nvim];
           }
         ];
+        setupOpts.defaults.path_display = ["truncate"];
         setupOpts.defaults.mappings.i = {
           "<C-j>" = "move_selection_next";
           "<C-k>" = "move_selection_previous";
