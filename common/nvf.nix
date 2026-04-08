@@ -96,7 +96,7 @@
           liveGrep = "<C-p><C-g>";
           buffers = "<C-p><C-b>";
           lspDocumentSymbols = "<C-p><C-o>";
-          lspWorkspaceSymbols = "<C-p><C-t>";
+          lspWorkspaceSymbols = null;
           lspReferences = "r<C-]>";
           # Disable nvf defaults not in my workflow
           helpTags = null;
@@ -601,6 +601,14 @@
           action = "<cmd>Telescope oldfiles<cr>";
           silent = true;
           desc = "Telescope oldfiles";
+        }
+        # <C-p><C-t> — dynamic workspace symbols (interactive query)
+        {
+          key = "<C-p><C-t>";
+          mode = ["n"];
+          action = "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>";
+          silent = true;
+          desc = "Telescope dynamic workspace symbols";
         }
         # <C-p><C-u> — telescope-undo extension
         {
