@@ -181,6 +181,10 @@
           };
           sources.default = ["lsp" "buffer" "path" "snippets"];
           cmdline.sources = ["path" "cmdline"];
+          completion.list.selection = {
+            preselect = false;
+            auto_insert = true;
+          };
           completion.documentation.auto_show = true;
           signature.enabled = true; # replaces lsp-signature (incompatible with blink.cmp)
         };

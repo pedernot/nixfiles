@@ -4,7 +4,7 @@
 
     startPlugins = with pkgs.vimPlugins; [
       # copilot-lsp enables NES (Next Edit Suggestions) mode in copilot.lua
-      copilot-lsp
+      # copilot-lsp
       # render-markdown for avante panel rendering
       render-markdown-nvim
       # codex.nvim — not in nixpkgs, build from source
@@ -20,25 +20,25 @@
     ];
 
     # copilot_nes_debounce used by copilot-lsp for NES debounce timing
-    globals.copilot_nes_debounce = 500;
+    # globals.copilot_nes_debounce = 500;
 
-    assistant.copilot = {
-      enable = true;
-      setupOpts = {
-        suggestion.auto_trigger = true;
-        # NES (Next Edit Suggestions) mode via copilot-lsp
-        nes = {
-          enabled = true;
-          keymap = {
-            accept_and_goto = "<M-u>";
-            accept = false;
-            dismiss = "<Esc>";
-          };
-        };
-      };
-      # suggestion.accept = "<M-l>" is already the nvf default — no override needed
-    };
-
+    # assistant.copilot = {
+    #   enable = true;
+    #   setupOpts = {
+    #     suggestion.auto_trigger = true;
+    #     # NES (Next Edit Suggestions) mode via copilot-lsp
+    #     nes = {
+    #       enabled = true;
+    #       keymap = {
+    #         accept_and_goto = "<M-u>";
+    #         accept = false;
+    #         dismiss = "<Esc>";
+    #       };
+    #     };
+    #   };
+    #   # suggestion.accept = "<M-l>" is already the nvf default — no override needed
+    # };
+    #
     assistant.avante-nvim = {
       enable = true;
       setupOpts = {
