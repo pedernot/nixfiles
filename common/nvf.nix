@@ -324,7 +324,10 @@
 
         -- Phase 10: UI
         require("bufferline").setup({ options = { diagnostics = "nvim_lsp" } })
-        require("neoscroll").setup({ hide_cursor = false })
+        require("neoscroll").setup({
+          hide_cursor = false,
+          mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-e>", "zt", "zz", "zb" },
+        })
         require("dressing").setup({})
 
         -- Phase 11: mini.nvim
