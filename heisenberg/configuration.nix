@@ -10,6 +10,7 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = ["pci_aspm=off"];
     supportedFilesystems = ["btrfs"];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
