@@ -40,7 +40,10 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   networking.hostName = "heisenberg";
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+   enable = true;
+    wifi.powersave = false;
+  };
 
   time.timeZone = "Europe/Oslo";
 
