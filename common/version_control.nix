@@ -116,6 +116,7 @@
         ".direnv"
         ".opencode"
         ".claude"
+        ".codex"
       ];
     };
 
