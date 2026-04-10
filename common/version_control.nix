@@ -7,7 +7,6 @@
           l = ["log" "-r" "(trunk()..@):: | (trunk()..@)-"];
           sl = ["log" "-l" "20"];
           al = ["log" "-r" "all()"];
-          mylog = ["log" "-r" "author('peder.galteland@softwarelab.no')"];
         };
         ui = {
           diff-editor = ["nvim" "-c" "DiffEditor $left $right $output"];
@@ -16,7 +15,7 @@
           default-command = "log";
         };
         user = {
-          email = "peder.galteland@softwarelab.no";
+          email = "peder.galteland@jottagroup.no";
           name = "Peder Notto Galteland";
         };
         signing = {
@@ -45,7 +44,7 @@
       settings = {
         user = {
           name = "Peder Notto Galteland";
-          email = "peder.galteland@softwarelab.no";
+          email = "peder.galteland@jottagroup.no";
           signingKey = "4980821A221FE5B1";
         };
         interactive.colorMoved = "default";
