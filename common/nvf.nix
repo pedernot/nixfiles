@@ -185,6 +185,7 @@
             preselect = false;
             auto_insert = true;
           };
+          completion.accept.auto_brackets.enabled = false;
           completion.documentation.auto_show = true;
           signature.enabled = true; # replaces lsp-signature (incompatible with blink.cmp)
         };
