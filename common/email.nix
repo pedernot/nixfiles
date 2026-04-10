@@ -187,9 +187,9 @@ in {
     accounts = {
       gmail-tsl = mkGmailAccount {
         primary = true;
-        address = "peder.galteland@softwarelab.no";
-        userName = "peder.galteland@softwarelab.no";
-        passwordCommand = "gmail-tsl-app-pw";
+        address = "peder.galteland@jottagroup.no";
+        userName = "peder.galteland@jottagroup.no";
+        passwordCommand = "gmail-jotta-app-pw";
         maildirPath = "gmail-tsl";
         syncGroup = "sync-gmail-tsl";
         patterns = [
@@ -421,7 +421,7 @@ in {
       extraConfig.user = {
         name = "Peder Notto Galteland";
         primary_email = "peder.notto@galte.land";
-        other_email = "peder.galteland@softwarelab.no;pederng@gmail.com;";
+        other_email = "peder.galteland@jottagroup.no;pederng@gmail.com;";
       };
     };
 
