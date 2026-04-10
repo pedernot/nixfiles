@@ -187,10 +187,10 @@
               layout = "even-horizontal";
             }
             {
-              name = "opencode";
+              name = "claude";
               root = ".";
               layout = "even-horizontal";
-              commands = ["opencode"];
+              commands = ["claude"];
             }
             {
               name = "staging";
