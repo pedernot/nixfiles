@@ -145,6 +145,7 @@
       # Enabling it also adds nvf's default <leader>lg* LSP keymaps (buffer-local).
       lsp = {
         enable = true;
+        formatOnSave = true;
 
         # Phase 8: Trouble (v2 API: "toggle diagnostics", not "workspace_diagnostics")
         # Default nvf mappings disabled — using <C-x><C-*> keymaps in vim.keymaps.
@@ -208,7 +209,7 @@
           };
           format = {
             enable = true;
-            type = ["ruff"];
+            type = ["ruff-check" "ruff"];
           };
         };
         nix = {
