@@ -209,7 +209,7 @@
           };
           format = {
             enable = true;
-            type = ["ruff-check" "ruff"];
+            type = ["ruff"];
           };
         };
         nix = {
@@ -238,6 +238,14 @@
           lsp.enable = true;
         };
       };
+
+      # Phase 6: Override Python conform formatters to use built-in ruff formatters.
+      # nvf's ruff and ruff-check don't pass --stdin-filename, so ruff can't find
+      # pyproject.toml and ignores project rules (including isort/I). Conform's
+      # built-in ruff_organize_imports and ruff_format pass --stdin-filename correctly.
+      luaConfigRC.python-format-override = ''
+        require("conform").formatters_by_ft.python = { "ruff_organize_imports", "ruff_format" }
+      '';
 
       # Phase 6: LspAttach keymaps (buffer-local, can't use vim.keymaps)
       # nvf's lsp.enable also adds <leader>lg* keymaps via its own LspAttach handler
