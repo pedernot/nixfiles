@@ -86,6 +86,15 @@
           }
         ];
         setupOpts.defaults.path_display = ["truncate"];
+        setupOpts.defaults.vimgrep_arguments = [
+          "${pkgs.ripgrep}/bin/rg"
+          "--color=never"
+          "--no-heading"
+          "--with-filename"
+          "--line-number"
+          "--column"
+          "--smart-case"
+        ];
         setupOpts.defaults.mappings.i = {
           "<C-j>" = "move_selection_next";
           "<C-k>" = "move_selection_previous";
