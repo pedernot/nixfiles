@@ -3,10 +3,15 @@
     jujutsu = {
       enable = true;
       settings = {
+        revset-aliases = {
+          "closest_merge(to)" = "heads(::to & merges())";
+        };
         aliases = {
           l = ["log" "-r" "(trunk()..@):: | (trunk()..@)-"];
           sl = ["log" "-l" "20"];
           al = ["log" "-r" "all()"];
+          stack = ["rebase" "--after" "trunk()" "--before" "closest_merge(@)" "--revision"];
+          stage = ["stack" "closest_merge(@).. ~ empty()"];
         };
         ui = {
           diff-editor = ["nvim" "-c" "DiffEditor $left $right $output"];
