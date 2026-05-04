@@ -10,6 +10,9 @@
         "spotify"
         "claude-code"
         "discord"
+        "todo.txt-vim"
+        "vim-textobj-entire"
+        "litee.nvim"
       ];
   };
   home.packages = with pkgs; [
