@@ -54,7 +54,7 @@
         };
         interactive.colorMoved = "default";
         push.default = "current";
-        commit.gpgsign = true;
+        commit.gpgsign = false;
         status.showUntrackedFiles = "all";
         "remote \"origin\"".prune = true;
         "mergetool \"nvim\"".cmd = "nvim -f -c \"Gdiffsplit!\" \"$MERGED\"";
