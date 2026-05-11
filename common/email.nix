@@ -185,13 +185,13 @@ in {
     maildirBasePath = "${config.xdg.dataHome}/mail";
 
     accounts = {
-      gmail-tsl = mkGmailAccount {
+      gmail-jotta = mkGmailAccount {
         primary = true;
         address = "peder.galteland@jottagroup.no";
         userName = "peder.galteland@jottagroup.no";
         passwordCommand = "gmail-jotta-app-pw";
-        maildirPath = "gmail-tsl";
-        syncGroup = "sync-gmail-tsl";
+        maildirPath = "gmail-jotta";
+        syncGroup = "sync-gmail-jotta";
         patterns = [
           "INBOX"
           "jira"
@@ -401,7 +401,7 @@ in {
 
         color sidebar_new color221 color233
 
-        macro index,pager 1 "<change-folder> =../gmail-tsl/inbox<enter>"
+        macro index,pager 1 "<change-folder> =../gmail-jotta/inbox<enter>"
         macro index,pager 2 "<change-folder> =../purelymail/inbox<enter>"
         macro index,pager 3 "<change-folder> =../gmail-personal/inbox<enter>"
       '';
