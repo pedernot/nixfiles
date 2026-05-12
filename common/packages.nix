@@ -25,6 +25,7 @@
     brightnessctl
     chromium
     claude-code
+    codex
     ctags
     difftastic
     dig
