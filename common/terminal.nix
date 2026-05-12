@@ -193,10 +193,22 @@
               commands = ["claude"];
             }
             {
+              name = "codex";
+              root = ".";
+              layout = "even-horizontal";
+              commands = ["codex"];
+            }
+            {
               name = "staging";
               root = ".";
               layout = "even-horizontal";
               commands = ["ssh staging"];
+            }
+            {
+              name = "util";
+              root = ".";
+              layout = "even-horizontal";
+              commands = ["ssh util1"];
             }
           ];
         };
