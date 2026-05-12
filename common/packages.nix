@@ -64,6 +64,7 @@
     nodejs
     openssl
     ormolu
+    pi-coding-agent
     pinentry-qt
     postgresql
     powertop
