@@ -2,7 +2,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "asbest" = {
         hostname = "bk.cptr.no";
       };
@@ -31,13 +31,13 @@
       };
       "dora-cluster" = {
         hostname = "search1";
-        dynamicForwards = [{port = 1080;}];
+        DynamicForward = "[localhost]:1080";
         proxyCommand = "ssh -q -W search1:%p bast2";
-        extraOptions = {SessionType = "none";};
+        sessionType = "none";
       };
       "mimir-db" = {
         hostname = "search1";
-        localForwards = [
+        LocalForward = [
           {
             bind.port = 5432;
             host.address = "mimir1a.int.no.cptr.no";
@@ -45,13 +45,13 @@
           }
         ];
         proxyCommand = "ssh -q -W search1:%p bast2";
-        extraOptions = {SessionType = "none";};
+        sessionType = "none";
       };
       "ci-cluster" = {
         hostname = "bk-ci3";
-        dynamicForwards = [{port = 1080;}];
+        DynamicForward = "[localhost]:1080";
         proxyCommand = "ssh -q -W bk-ci3.dhcp.bk.cptr.no:%p asbest";
-        extraOptions = {SessionType = "none";};
+        sessionType = "none";
       };
       "bk-ci*" = {
         proxyCommand = "ssh -q -W %h.dhcp.bk.cptr.no:%p asbest";
