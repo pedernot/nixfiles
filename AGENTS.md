@@ -65,6 +65,23 @@ fd -e lua -x stylua {}      # Format all Lua files
 statix check .              # Check Nix files with statix
 ```
 
+### Pi Extension Verification
+
+When editing TypeScript pi extensions in `extensions/`, use both checks:
+
+```bash
+# Type-check extensions without emitting JavaScript
+# If this config is missing, add/maintain it rather than relying only on smoke tests.
+tsc --noEmit -p tsconfig.pi-extensions.json
+
+# Smoke-test that pi can load each extension through its runtime loader
+for f in extensions/*.ts; do
+  PI_OFFLINE=1 pi --no-extensions -e "$f" --list-models __pi_ext_smoke__ >/dev/null
+done
+```
+
+The `tsc` check catches TypeScript errors; the pi smoke test catches runtime loader/import/factory errors without making a model call.
+
 ## Code Style Guidelines
 
 ### Nix Files

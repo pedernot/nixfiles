@@ -121,6 +121,7 @@
         ".opencode"
         ".claude"
         ".codex"
+        ".pi"
       ];
     };
 
