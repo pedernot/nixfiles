@@ -726,8 +726,6 @@ async function shouldAllowCommand(
 	const command = normalizeCommand(rawCommand);
 	const policy = await getRepositoryPolicy(ctx);
 
-	if (policy.diagnostics.length > 0 && ctx.hasUI) ctx.ui.notify(policy.diagnostics.join("\n"), "warning");
-
 	if (commandMentionsProtectedWhitelist(ctx, policy, command)) {
 		const allowed = await promptForProtectedWhitelistCommand(ctx, policy, toolName, command);
 		if (allowed) return { allowed: true, reason: "Allowed once to access bash-command-guard whitelist path" };
@@ -769,15 +767,7 @@ export default function (pi: ExtensionAPI) {
 	pi.on("session_start", async (_event, ctx) => {
 		if (!ctx.hasUI) return;
 
-		const policy = await getRepositoryPolicy(ctx);
 		ctx.ui.setStatus("bash-guard", ctx.ui.theme.fg("accent", "🛡 bash guard"));
-		ctx.ui.notify(
-			[
-				`bash-command-guard active. ${policy.patterns.length} whitelist pattern(s) loaded from ${policy.configPath}`,
-				...policy.diagnostics.map((diagnostic) => `Warning: ${diagnostic}`),
-			].join("\n"),
-			policy.diagnostics.length > 0 ? "warning" : "info",
-		);
 	});
 
 	pi.on("tool_call", async (event, ctx) => {
@@ -818,7 +808,7 @@ export default function (pi: ExtensionAPI) {
 					...(policy.patterns.length > 0 ? policy.patterns.map((pattern) => `- ${pattern}`) : ["- <none>"]),
 					...(policy.diagnostics.length > 0 ? ["", "Diagnostics:", ...policy.diagnostics.map((line) => `- ${line}`)] : []),
 				].join("\n"),
-				policy.diagnostics.length > 0 ? "warning" : "info",
+				"info",
 			);
 		},
 	});
