@@ -246,6 +246,10 @@
           enable = true;
           lsp.enable = true;
         };
+        zig = {
+          enable = true;
+          lsp.enable = true;
+        };
       };
 
       # Phase 6: Override Python conform formatters to use built-in ruff formatters.
