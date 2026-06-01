@@ -23,7 +23,6 @@
     ast-grep
     awscli2
     brightnessctl
-    chromium
     claude-code
     codex
     ctags
@@ -97,6 +96,5 @@
     xh
     yq
     yt-dlp
-    inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
   ];
 }
