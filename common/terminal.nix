@@ -166,11 +166,6 @@
               root = "mimir";
               layout = "even-horizontal";
             }
-            {
-              name = "search";
-              root = "search-backend";
-              layout = "even-horizontal";
-            }
           ];
         };
         tests = {
