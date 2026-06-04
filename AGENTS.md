@@ -139,9 +139,6 @@ jj commit -m "msg"     # Create a new commit
 jj new                 # Start a new change
 ```
 
-### Workspace Isolation for Agents
-
-When making changes, use Jujutsu workspaces for isolation:
 
 ```bash
 jj workspace add agent-<task-name>
