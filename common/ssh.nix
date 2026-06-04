@@ -59,11 +59,6 @@
       "client" = {
         hostname = "login-client.univex.no";
       };
-      "34.* 54.*" = lib.hm.dag.entryBefore ["*"] {
-        # aws
-        user = "ubuntu";
-        identityFile = "/home/peder/.ssh/backend_key.pem";
-      };
       "*" = {
         user = "pedernot";
         serverAliveInterval = 60;
