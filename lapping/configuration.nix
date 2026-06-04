@@ -70,6 +70,7 @@
 
   services = {
     pulseaudio.enable = false;
+    kolide-launcher.enable = true;
     pipewire = {
       enable = true;
       alsa.enable = true;
