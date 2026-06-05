@@ -51,6 +51,12 @@
     polkit.enable = true;
     rtkit.enable = true;
     pam.services.waylock = {};
+    sudo = {
+      enable = true;
+      extraConfig = ''
+        Defaults use_pty
+      '';
+    };
   };
 
   virtualisation.docker.enable = true;
