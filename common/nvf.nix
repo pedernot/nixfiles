@@ -62,6 +62,7 @@
           rust
           bash
           haskell
+          java
           dockerfile
           markdown
           yaml
@@ -245,6 +246,13 @@
         haskell = {
           enable = true;
           lsp.enable = true;
+        };
+        java = {
+          enable = true;
+          lsp = {
+            enable = true;
+            servers = ["jdt-language-server"];
+          };
         };
         zig = {
           enable = true;
