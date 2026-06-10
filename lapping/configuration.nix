@@ -80,6 +80,7 @@
   services = {
     pulseaudio.enable = false;
     kolide-launcher.enable = true;
+    openssh.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;
