@@ -249,10 +249,7 @@
         };
         java = {
           enable = true;
-          lsp = {
-            enable = true;
-            servers = ["jdt-language-server"];
-          };
+          lsp.enable = true;
         };
         zig = {
           enable = true;
@@ -280,6 +277,11 @@
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
             vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            if client and client.name == "jdt-language-server" then
+              client.server_capabilities.documentFormattingProvider = false
+              client.server_capabilities.documentRangeFormattingProvider = false
+            end
             vim.keymap.set("n", "<space>f", function()
               vim.lsp.buf.format({ async = true })
             end, bufopts)
