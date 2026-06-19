@@ -8,7 +8,6 @@
         };
         aliases = {
           l = ["log" "-r" "(trunk()..@):: | (trunk()..@)-"];
-          sl = ["log" "-l" "20"];
           al = ["log" "-r" "all()"];
           stack = ["rebase" "--after" "trunk()" "--before" "closest_merge(@)" "--revision"];
           stage = ["stack" "closest_merge(@).. ~ empty()"];
