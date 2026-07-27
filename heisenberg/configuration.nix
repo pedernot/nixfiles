@@ -25,6 +25,7 @@
       nvidiaSettings = true;
       modesetting.enable = true;
     };
+    xone.enable = true;
     bluetooth = {
       enable = true;
       powerOnBoot = true;
