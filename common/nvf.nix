@@ -290,6 +290,21 @@ in {
         formatters_by_ft.kotlin = ["ktlint"];
       };
 
+      # Treesitter's Kotlin indent expression currently returns column zero
+      # for new lines. Use Neovim's Kotlin indent script instead.
+      luaConfigRC.kotlin-indent = ''
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = "kotlin",
+          callback = function()
+            vim.bo.indentexpr = "GetKotlinIndent()"
+            vim.bo.expandtab = true
+            vim.bo.shiftwidth = 4
+            vim.bo.softtabstop = 4
+            vim.bo.tabstop = 4
+          end,
+        })
+      '';
+
       # nvf's synchronous format-on-save timeout is 500 ms. ktlint starts a
       # JVM, so give Kotlin buffers enough time while preserving the existing
       # timeout for faster formatters.
