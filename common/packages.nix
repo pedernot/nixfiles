@@ -10,6 +10,7 @@
         "spotify"
         "claude-code"
         "discord"
+        "discord-unwrapped"
         "todo.txt-vim"
         "vim-textobj-entire"
         "litee.nvim"
