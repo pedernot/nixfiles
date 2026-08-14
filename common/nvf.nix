@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  kotlinLsp = pkgs.callPackage ./kotlin-lsp.nix {};
+in {
   programs.nvf = {
     enable = true;
     settings.vim = {
@@ -251,11 +257,54 @@
           enable = true;
           lsp.enable = true;
         };
+        kotlin = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = false;
+          extraDiagnostics.enable = true;
+        };
         zig = {
           enable = true;
           lsp.enable = true;
         };
       };
+
+      # JetBrains' official Kotlin server is not packaged by nvf yet. Keep the
+      # language module for Treesitter and ktlint, and register the LSP here.
+      lsp.servers.kotlin-lsp = {
+        cmd = ["${lib.getExe kotlinLsp}" "--stdio"];
+        filetypes = ["kotlin"];
+        root_markers = [
+          "settings.gradle"
+          "settings.gradle.kts"
+          "pom.xml"
+          "build.gradle"
+          "build.gradle.kts"
+          "workspace.json"
+        ];
+      };
+
+      # nvf's Kotlin module exposes ktlint diagnostics but not formatting.
+      formatter.conform-nvim.setupOpts = {
+        formatters.ktlint.command = lib.getExe pkgs.ktlint;
+        formatters_by_ft.kotlin = ["ktlint"];
+      };
+
+      # nvf's synchronous format-on-save timeout is 500 ms. ktlint starts a
+      # JVM, so give Kotlin buffers enough time while preserving the existing
+      # timeout for faster formatters.
+      luaConfigRC.kotlin-format-timeout = ''
+        require("conform").setup({
+          format_on_save = function(bufnr)
+            if not vim.g.formatsave or vim.b[bufnr].disableFormatSave then
+              return
+            end
+
+            local timeout_ms = vim.bo[bufnr].filetype == "kotlin" and 5000 or 500
+            return { lsp_format = "fallback", timeout_ms = timeout_ms }
+          end,
+        })
+      '';
 
       # Phase 6: Override Python conform formatters to use built-in ruff formatters.
       # nvf's ruff and ruff-check don't pass --stdin-filename, so ruff can't find
