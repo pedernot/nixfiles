@@ -377,6 +377,42 @@ in {
                   local uri = item and item.user_data and item.user_data.uri
                   local scheme = uri and uri:match("^([%w+.-]+):")
 
+                  if #options.items == 1 and scheme == "jdt" then
+                    local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "jdt-language-server" })
+                    local client = clients[1]
+                    if not client then
+                      vim.notify("JDT language server is not attached", vim.log.levels.ERROR)
+                      return
+                    end
+
+                    client:request("java/classFileContents", { uri = uri }, function(err, result)
+                      if err or not result then
+                        vim.notify(
+                          "Java class loading failed: " .. (err and err.message or "no source returned"),
+                          vim.log.levels.ERROR
+                        )
+                        return
+                      end
+
+                      local bufnr = vim.uri_to_bufnr(uri)
+                      vim.bo[bufnr].modifiable = true
+                      local source = result:gsub("\r\n", "\n")
+                      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split(source, "\n", { plain = true }))
+                      vim.bo[bufnr].buftype = "nofile"
+                      vim.bo[bufnr].buflisted = true
+                      vim.bo[bufnr].swapfile = false
+                      vim.bo[bufnr].filetype = "java"
+                      vim.bo[bufnr].modifiable = false
+                      vim.api.nvim_set_current_buf(bufnr)
+
+                      local range = item.user_data.range
+                      if range then
+                        vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
+                      end
+                    end, ev.buf)
+                    return
+                  end
+
                   if #options.items == 1 and (scheme == "jar" or scheme == "jrt") then
                     local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "kotlin-lsp" })
                     local client = clients[1]
