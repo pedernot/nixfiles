@@ -286,7 +286,21 @@ in {
 
       # nvf's Kotlin module exposes ktlint diagnostics but not formatting.
       formatter.conform-nvim.setupOpts = {
-        formatters.ktlint.command = lib.getExe pkgs.ktlint;
+        formatters.ktlint = {
+          command = lib.getExe pkgs.ktlint;
+          args = [
+            "--format"
+            "$FILENAME"
+            "--log-level=none"
+          ];
+          # ktlint 1.8.0's stdin formatter treats Kotlin's `%` operator as a
+          # printf conversion and crashes. Let Conform format a same-directory
+          # temporary file instead; this also preserves .editorconfig lookup.
+          stdin = false;
+          # ktlint exits 1 when unfixable lint violations remain, even when it
+          # successfully writes all safe formatting changes to the file.
+          exit_codes = [0 1];
+        };
         formatters_by_ft.kotlin = ["ktlint"];
       };
 
@@ -347,7 +361,10 @@ in {
               client.server_capabilities.documentRangeFormattingProvider = false
             end
             vim.keymap.set("n", "<space>f", function()
-              vim.lsp.buf.format({ async = true })
+              require("conform").format({
+                async = true,
+                lsp_format = "fallback",
+              })
             end, bufopts)
           end,
         })
