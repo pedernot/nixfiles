@@ -274,6 +274,7 @@ in {
       lsp.servers.kotlin-lsp = {
         cmd = ["${lib.getExe kotlinLsp}" "--stdio"];
         filetypes = ["kotlin"];
+        settings.intellij.jdkForSymbolResolution = lib.generators.mkLuaInline "vim.env.JAVA_HOME";
         root_markers = [
           "settings.gradle"
           "settings.gradle.kts"
