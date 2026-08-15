@@ -370,7 +370,18 @@ in {
             vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
             local bufopts = { noremap = true, silent = true, buffer = ev.buf }
             vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-            vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+            vim.keymap.set("n", "gd", function()
+              vim.lsp.buf.definition({
+                on_list = function(options)
+                  vim.fn.setqflist({}, " ", options)
+                  if #options.items == 1 then
+                    vim.cmd.cfirst()
+                  else
+                    vim.cmd.copen()
+                  end
+                end,
+              })
+            end, bufopts)
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
             vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
             local client = vim.lsp.get_client_by_id(ev.data.client_id)
