@@ -4,6 +4,12 @@
   ...
 }: let
   kotlinLsp = pkgs.callPackage ./kotlin-lsp.nix {};
+  kotlinProjectJdkHome = ''
+    (function()
+      local java = vim.fn.resolve(vim.env.JAVA_HOME .. "/bin/java")
+      return vim.fs.dirname(vim.fs.dirname(java))
+    end)()
+  '';
 in {
   programs.nvf = {
     enable = true;
@@ -273,8 +279,13 @@ in {
       # language module for Treesitter and ktlint, and register the LSP here.
       lsp.servers.kotlin-lsp = {
         cmd = ["${lib.getExe kotlinLsp}" "--stdio"];
+        cmd_env.IJ_JAVA_OPTIONS = lib.generators.mkLuaInline ''
+          (vim.env.IJ_JAVA_OPTIONS or "")
+            .. " -Dcom.jetbrains.ls.imports.gradle.java.home="
+            .. ${kotlinProjectJdkHome}
+        '';
         filetypes = ["kotlin"];
-        settings.intellij.jdkForSymbolResolution = lib.generators.mkLuaInline "vim.env.JAVA_HOME";
+        init_options.defaultSdk = lib.generators.mkLuaInline kotlinProjectJdkHome;
         root_markers = [
           "settings.gradle"
           "settings.gradle.kts"
