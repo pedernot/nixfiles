@@ -373,6 +373,48 @@ in {
             vim.keymap.set("n", "gd", function()
               vim.lsp.buf.definition({
                 on_list = function(options)
+                  local item = options.items[1]
+                  local uri = item and item.user_data and item.user_data.uri
+                  local scheme = uri and uri:match("^([%w+.-]+):")
+
+                  if #options.items == 1 and (scheme == "jar" or scheme == "jrt") then
+                    local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "kotlin-lsp" })
+                    local client = clients[1]
+                    if not client then
+                      vim.notify("Kotlin LSP is not attached", vim.log.levels.ERROR)
+                      return
+                    end
+
+                    client:request("workspace/executeCommand", {
+                      command = "decompile",
+                      arguments = { uri },
+                    }, function(err, result)
+                      if err or not result or not result.code then
+                        vim.notify(
+                          "Kotlin decompilation failed: " .. (err and err.message or "no source returned"),
+                          vim.log.levels.ERROR
+                        )
+                        return
+                      end
+
+                      local bufnr = vim.uri_to_bufnr(uri)
+                      vim.bo[bufnr].modifiable = true
+                      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split(result.code, "\n", { plain = true }))
+                      vim.bo[bufnr].buftype = "nofile"
+                      vim.bo[bufnr].buflisted = true
+                      vim.bo[bufnr].swapfile = false
+                      vim.bo[bufnr].filetype = result.language or "kotlin"
+                      vim.bo[bufnr].modifiable = false
+                      vim.api.nvim_set_current_buf(bufnr)
+
+                      local range = item.user_data.range
+                      if range then
+                        vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
+                      end
+                    end, ev.buf)
+                    return
+                  end
+
                   vim.fn.setqflist({}, " ", options)
                   if #options.items == 1 then
                     vim.cmd.cfirst()
