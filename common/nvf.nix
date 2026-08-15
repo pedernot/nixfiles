@@ -287,6 +287,10 @@ in {
 
       # nvf's Kotlin module exposes ktlint diagnostics but not formatting.
       formatter.conform-nvim.setupOpts = {
+        # Leave Kotlin's formatter list empty so Conform uses its configured
+        # LSP fallback. To restore ktlint, uncomment this block and replace
+        # the empty formatter list with the commented mapping below.
+        /*
         formatters.ktlint = {
           command = lib.getExe pkgs.ktlint;
           args = [
@@ -303,6 +307,8 @@ in {
           exit_codes = [0 1];
         };
         formatters_by_ft.kotlin = ["ktlint"];
+        */
+        formatters_by_ft.kotlin = [];
       };
 
       # Treesitter's Kotlin indent expression currently returns column zero
