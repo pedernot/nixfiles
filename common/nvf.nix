@@ -6,7 +6,12 @@
   kotlinLsp = pkgs.callPackage ./kotlin-lsp.nix {};
   kotlinProjectJdkHome = ''
     (function()
-      local java = vim.fn.resolve(vim.env.JAVA_HOME .. "/bin/java")
+      local java_home = vim.env.JAVA_HOME
+      local java = java_home and java_home ~= "" and (java_home .. "/bin/java") or vim.fn.exepath("java")
+      if java == "" then
+        return "${pkgs.jdk25}/lib/openjdk"
+      end
+      java = vim.fn.resolve(java)
       return vim.fs.dirname(vim.fs.dirname(java))
     end)()
   '';
