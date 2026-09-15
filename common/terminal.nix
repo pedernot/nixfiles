@@ -182,12 +182,6 @@
               layout = "even-horizontal";
             }
             {
-              name = "claude";
-              root = ".";
-              layout = "even-horizontal";
-              commands = ["claude"];
-            }
-            {
               name = "codex";
               root = ".";
               layout = "even-horizontal";
