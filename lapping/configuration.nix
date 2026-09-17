@@ -78,6 +78,7 @@
   ];
 
   services = {
+    pcscd.enable = true;
     pulseaudio.enable = false;
     kolide-launcher.enable = true;
     openssh.enable = false;
