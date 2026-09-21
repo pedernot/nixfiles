@@ -1,7 +1,6 @@
 _: {
   imports = [
     ./terminal.nix
-    ./nvf.nix
     ./gpg.nix
     ./email.nix
     ./rss.nix
