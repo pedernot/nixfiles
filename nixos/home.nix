@@ -4,10 +4,16 @@
     ./sway.nix
     ./terminal.nix
   ];
-  home.packages = with pkgs; [
-    hledger
-  ];
-  home.sessionVariables = {
-    LEGDER_FILE = "$HOME/workspace/finances/main.journal";
+
+  home = {
+    username = "peder";
+    homeDirectory = "/home/peder";
+    stateVersion = "25.11";
+    packages = with pkgs; [
+      hledger
+    ];
+    sessionVariables = {
+      LEGDER_FILE = "$HOME/workspace/finances/main.journal";
+    };
   };
 }
