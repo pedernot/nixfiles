@@ -55,12 +55,6 @@
       fi
     '';
   };
-  sm = pkgs.writeShellApplication {
-    name = "sm";
-    text = ''
-      smug "$(smug list | fzf --height 50% --reverse)"
-    '';
-  };
   sp = pkgs.writeShellApplication {
     name = "sp";
     text = ''
@@ -107,7 +101,6 @@ in {
     fzfmenu
     fzflaunch
     fpass
-    sm
     sp
   ];
 }

@@ -1,5 +1,9 @@
 _: {
   imports = [
+    ./packages.nix
+    ./programs.nix
+    ./scripts.nix
+    ./theme.nix
     ./pi.nix
     ./zsh-completions.nix
   ];

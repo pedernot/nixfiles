@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  inputs,
   ...
 }: {
   nixpkgs = {
@@ -17,44 +16,32 @@
       ];
   };
   home.packages = with pkgs; [
-    acpi
     alejandra
-    alsa-utils
     ansible-lint
     ast-grep
     awscli2
-    brightnessctl
     claude-code
     codex
     ctags
     difftastic
     dig
-    dmenu
-    dmenu-wayland
     dockerfile-language-server
     entr
     exiftool
     fastmod
     fd
-    firefox
-    gcc
     gnumake
     go
-    grim
     hadolint
-    handlr
     helmfile
     hledger
     jq
-    k3s
     k9s
     kafkactl
     kubectx
     kubelogin
     kubelogin-oidc
     kubernetes-helm
-    libcamera
-    libnotify
     lsof
     lua5_1
     luarocks
@@ -65,35 +52,23 @@
     openssl
     ormolu
     pi-coding-agent
-    pinentry-qt
     postgresql
-    powertop
-    ps_mem
-    pwvucontrol
     readline
     ripgrep
     rsync
     shellcheck
     skaffold
     slides
-    slurp
     sops
-    spotify
     statix
     stern
-    strace
     stylua
-    swayimg
     tokei
     tree
     units
     unzip
     urlscan
-    waylock
     wget
-    wl-clipboard
-    xclip
-    xdg-utils
     xh
     yq
     yt-dlp

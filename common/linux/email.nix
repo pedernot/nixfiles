@@ -438,9 +438,9 @@ in {
   };
 
   xdg.configFile = {
-    "mutt/bindings".source = ../mutt/bindings;
-    "mutt/colors".source = ../mutt/colors;
-    "mutt/gpg.rc".source = ../mutt/gpg.rc;
-    "mutt/mailcap".source = ../mutt/mailcap;
+    "mutt/bindings".source = ../../mutt/bindings;
+    "mutt/colors".source = ../../mutt/colors;
+    "mutt/gpg.rc".source = ../../mutt/gpg.rc;
+    "mutt/mailcap".source = ../../mutt/mailcap;
   };
 }

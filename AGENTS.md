@@ -5,13 +5,15 @@ NixOS/Home Manager dotfiles repository using Nix flakes for declarative system c
 ## Project Structure
 
 - `flake.nix` - Main flake (defines `lapping` work laptop and `nixos` personal laptop configs)
-- `common/` - Shared home-manager modules (packages.nix, programs.nix, terminal.nix, etc.)
-- `common/email.nix` - Shared email stack (accounts.email, mbsync, msmtp, notmuch, neomutt)
+- `common/shared/` - Cross-platform Home Manager modules
+- `common/linux/` - Linux Home Manager and shared NixOS modules
+- `common/macos/` - macOS-specific Home Manager modules
+- `common/linux/email.nix` - Mail stack (accounts.email, mbsync, msmtp, notmuch, neomutt)
 - `lapping/` - Work laptop configuration
 - `nixos/` - Personal laptop configuration
 - `nvim/` - Neovim config (Lua): `init.lua`, `lua/config/`, `lua/plugins/`
 - `zsh/` - Zsh configuration files
-- `common/scripts.nix` - Custom script wrappers packaged via Nix
+- `common/shared/scripts.nix` and `common/linux/scripts.nix` - Custom script wrappers packaged via Nix
 - `THEMING.md` - Stylix ownership and theming workflow
 - `EMAIL.md` - Mail stack ownership and generated config layout
 - `skills/` - AI agent skills documentation
@@ -123,7 +125,7 @@ imports = [
 
 **Shebang**: Use `#!/usr/bin/env bash` for bash scripts
 
-**Location**: Define custom scripts in `common/scripts.nix` using `writeShellApplication`
+**Location**: Define custom scripts in `common/shared/scripts.nix` or `common/linux/scripts.nix` using `writeShellApplication`
 
 ## Version Control
 
@@ -158,11 +160,11 @@ See `skills/jj-workspace/SKILL.md` for detailed workspace workflow.
 
 ### Adding a New Package
 
-Edit `common/packages.nix`, add to `home.packages` list.
+Edit `common/shared/packages.nix` or `common/linux/packages.nix`, according to platform ownership.
 
 ### Email Configuration
 
-- Shared mail setup lives in `common/email.nix`
+- Mail setup currently lives in `common/linux/email.nix`
 - Prefer `accounts.email` and Home Manager program modules over raw config files
 - Keep the remaining mutt fragments only for shared UI/behavior (`mutt/bindings`, `mutt/colors`, `mutt/gpg.rc`, `mutt/mailcap`)
 
@@ -193,7 +195,7 @@ If `nixos-rebuild` fails:
 
 ### Unfree Packages
 
-Add to allowlist in `common/packages.nix`:
+Add to the allowlist in `common/shared/packages.nix`:
 ```nix
 nixpkgs.config.allowUnfreePredicate = pkg:
   builtins.elem (lib.getName pkg) [

@@ -16,11 +16,11 @@
       homedir = "${config.xdg.dataHome}/gnupg";
       publicKeys = [
         {
-          source = ../peder.galteland.pem;
+          source = ../../peder.galteland.pem;
           trust = "ultimate";
         }
         {
-          source = ../personal-key;
+          source = ../../personal-key;
           trust = "ultimate";
         }
       ];

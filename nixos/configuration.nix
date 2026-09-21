@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./hardware-configuration.nix
-    ../common/stylix.nix
+    ../common/linux/stylix.nix
   ];
 
   boot = {

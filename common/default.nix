@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./shared.nix
-    ./linux.nix
+    ./shared
+    ./linux
   ];
 }
