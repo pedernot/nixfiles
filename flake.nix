@@ -26,10 +26,11 @@
     nixpkgs,
     home-manager,
     ...
-  } @ inputs: let
-    system = "x86_64-linux";
-  in {
-    packages.${system} = home-manager.packages.${system};
+  } @ inputs: {
+    packages = nixpkgs.lib.genAttrs [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ] (system: home-manager.packages.${system});
 
     homeConfigurations."peder@macbook" = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {system = "aarch64-darwin";};
