@@ -1,5 +1,5 @@
 {
-  description = "NixOS flake";
+  description = "NixOS and Home Manager configurations";
 
   inputs = {
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
@@ -30,6 +30,16 @@
     system = "x86_64-linux";
   in {
     packages.${system} = home-manager.packages.${system};
+
+    homeConfigurations."peder@macbook" = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {system = "aarch64-darwin";};
+      extraSpecialArgs = {inherit inputs;};
+      modules = [
+        inputs.nvf.homeManagerModules.default
+        inputs.stylix.homeModules.stylix
+        ./macbook/home.nix
+      ];
+    };
 
     nixosConfigurations = {
       lapping = nixpkgs.lib.nixosSystem {
