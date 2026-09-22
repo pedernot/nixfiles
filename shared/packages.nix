@@ -25,10 +25,6 @@
     gnumake
     go
     jq
-    kubectx
-    kubelogin
-    kubelogin-oidc
-    kubernetes-helm
     lsof
     lua5_1
     luarocks
