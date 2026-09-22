@@ -15,7 +15,6 @@
       ];
   };
   home.packages = with pkgs; [
-    alejandra
     codex
     ctags
     difftastic
@@ -33,17 +32,13 @@
     lsof
     lua5_1
     luarocks
-    nixd
     nodejs
     openssl
     pi-coding-agent
     readline
     ripgrep
     rsync
-    shellcheck
     slides
-    statix
-    stylua
     tree
     unzip
     urlscan

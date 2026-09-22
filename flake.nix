@@ -32,6 +32,25 @@
       "aarch64-darwin"
     ] (system: home-manager.packages.${system});
 
+    devShells =
+      nixpkgs.lib.genAttrs [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ] (system: let
+        pkgs = import nixpkgs {inherit system;};
+      in {
+        default = pkgs.mkShell {
+          packages = with pkgs; [
+            alejandra
+            deadnix
+            nixd
+            shellcheck
+            statix
+            stylua
+          ];
+        };
+      });
+
     homeConfigurations."peder@macbook" = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {system = "aarch64-darwin";};
       extraSpecialArgs = {inherit inputs;};

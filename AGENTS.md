@@ -43,6 +43,12 @@ Important: NEVER run nixos-rebuild
 
 ## Formatting and Linting
 
+Enter the repository development shell before running the formatting and linting tools:
+
+```bash
+nix develop
+```
+
 ### Formatters (format-on-save enabled in Neovim)
 
 | Language | Formatter | Command |
@@ -55,6 +61,7 @@ Important: NEVER run nixos-rebuild
 
 | Language | Linter | Purpose |
 |----------|--------|---------|
+| Nix | deadnix | Find unused Nix bindings and function arguments |
 | Nix | statix | Static analysis for Nix |
 | Dockerfile | hadolint | Dockerfile linting |
 | Shell | shellcheck | Shell script analysis |
@@ -64,8 +71,16 @@ Important: NEVER run nixos-rebuild
 ```bash
 fd -e nix -x alejandra {}   # Format all Nix files
 fd -e lua -x stylua {}      # Format all Lua files
+deadnix --fail -L .         # Fail if unused Nix code is found
 statix check .              # Check Nix files with statix
 ```
+
+`deadnix` parses Nix source without evaluating or building the flake. No output
+means that it found no dead code. To remove findings automatically, run
+`deadnix --edit <path>`, inspect the diff, and format the changed files with
+Alejandra. The repository-wide check uses `-L` (`--no-lambda-pattern-names`)
+because NixOS modules and generated hardware configurations can have
+intentionally unused attrset arguments. Omit `-L` for a more aggressive check.
 
 ### Pi Extension Verification
 
