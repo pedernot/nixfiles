@@ -52,8 +52,8 @@
         "NO_NOTIFY"
       ];
       initContent = ''
-        ${lib.strings.fileContents ../../zsh/functions.zsh}
-        ${lib.strings.fileContents ../../zsh/zshrc}
+        ${lib.strings.fileContents ../zsh/functions.zsh}
+        ${lib.strings.fileContents ../zsh/zshrc}
       '';
       history = {
         path = "${config.programs.zsh.dotDir}/histfile";
@@ -72,7 +72,7 @@
       keyMode = "vi";
       terminal = "screen-256color";
       extraConfig = builtins.concatStringsSep "\n" [
-        (lib.strings.fileContents ../../tmux.conf)
+        (lib.strings.fileContents ../tmux.conf)
       ];
       plugins = with pkgs; [
         {

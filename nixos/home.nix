@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
-    ../common
+    ../shared
+    ../linux
     ./sway.nix
     ./terminal.nix
   ];

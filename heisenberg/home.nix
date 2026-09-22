@@ -1,6 +1,7 @@
 _: {
   imports = [
-    ../common
+    ../shared
+    ../linux
     ./discord.nix
   ];
 

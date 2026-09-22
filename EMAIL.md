@@ -4,7 +4,7 @@ This repository manages the mail stack through Home Manager.
 
 ## Ownership
 
-- Mail configuration currently lives in `common/linux/email.nix`.
+- Mail configuration currently lives in `linux/email.nix`.
 - Account definitions are declared in `accounts.email.accounts`.
 - Generated configs come from Home Manager for:
   - `msmtp`
@@ -20,7 +20,7 @@ The current accounts are:
 - `gmail-personal`
 - `purelymail`
 
-`common/linux/email.nix` is the source of truth for:
+`linux/email.nix` is the source of truth for:
 
 - email addresses and usernames
 - maildir paths

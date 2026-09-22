@@ -1,7 +1,7 @@
 _: {
   # Shared HM Stylix target policy — applies to all hosts.
   # Base scheme, polarity, fonts, and image are set at the NixOS level in
-  # common/linux/stylix.nix and inherited here automatically on Linux.
+  # linux/stylix.nix and inherited here automatically on Linux.
   #
   # Keep autoEnable = false. Add new targets explicitly below only after
   # verifying they don't conflict with existing per-app config.

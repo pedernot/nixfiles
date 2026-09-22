@@ -1,6 +1,7 @@
 _: {
   imports = [
-    ../common
+    ../shared
+    ../linux
     ./sway.nix
     ./nvim.nix
     ./scripts.nix

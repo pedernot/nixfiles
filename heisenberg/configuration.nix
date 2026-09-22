@@ -5,7 +5,7 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    ../common/linux/stylix.nix
+    ../linux/stylix.nix
   ];
 
   boot = {

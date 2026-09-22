@@ -5,15 +5,15 @@ NixOS/Home Manager dotfiles repository using Nix flakes for declarative system c
 ## Project Structure
 
 - `flake.nix` - Main flake (defines `lapping` work laptop and `nixos` personal laptop configs)
-- `common/shared/` - Cross-platform Home Manager modules
-- `common/linux/` - Linux Home Manager and shared NixOS modules
-- `common/macos/` - macOS-specific Home Manager modules
-- `common/linux/email.nix` - Mail stack (accounts.email, mbsync, msmtp, notmuch, neomutt)
+- `shared/` - Cross-platform Home Manager modules
+- `linux/` - Linux Home Manager and shared NixOS modules
+- `macos/` - macOS-specific Home Manager modules
+- `linux/email.nix` - Mail stack (accounts.email, mbsync, msmtp, notmuch, neomutt)
 - `lapping/` - Work laptop configuration
 - `nixos/` - Personal laptop configuration
 - `nvim/` - Neovim config (Lua): `init.lua`, `lua/config/`, `lua/plugins/`
 - `zsh/` - Zsh configuration files
-- `common/shared/scripts.nix` and `common/linux/scripts.nix` - Custom script wrappers packaged via Nix
+- `shared/scripts.nix` and `linux/scripts.nix` - Custom script wrappers packaged via Nix
 - `THEMING.md` - Stylix ownership and theming workflow
 - `EMAIL.md` - Mail stack ownership and generated config layout
 - `skills/` - AI agent skills documentation
@@ -125,7 +125,7 @@ imports = [
 
 **Shebang**: Use `#!/usr/bin/env bash` for bash scripts
 
-**Location**: Define custom scripts in `common/shared/scripts.nix` or `common/linux/scripts.nix` using `writeShellApplication`
+**Location**: Define custom scripts in `shared/scripts.nix` or `linux/scripts.nix` using `writeShellApplication`
 
 ## Version Control
 
@@ -160,11 +160,11 @@ See `skills/jj-workspace/SKILL.md` for detailed workspace workflow.
 
 ### Adding a New Package
 
-Edit `common/shared/packages.nix` or `common/linux/packages.nix`, according to platform ownership.
+Edit `shared/packages.nix` or `linux/packages.nix`, according to platform ownership.
 
 ### Email Configuration
 
-- Mail setup currently lives in `common/linux/email.nix`
+- Mail setup currently lives in `linux/email.nix`
 - Prefer `accounts.email` and Home Manager program modules over raw config files
 - Keep the remaining mutt fragments only for shared UI/behavior (`mutt/bindings`, `mutt/colors`, `mutt/gpg.rc`, `mutt/mailcap`)
 
@@ -181,7 +181,8 @@ return {
 
 - Work laptop config: `lapping/` directory
 - Personal laptop config: `nixos/` directory
-- Shared config: `common/` directory
+- Cross-platform config: `shared/` directory
+- Platform config: `linux/` or `macos/` directory
 
 ## Error Handling
 
@@ -195,7 +196,7 @@ If `nixos-rebuild` fails:
 
 ### Unfree Packages
 
-Add to the allowlist in `common/shared/packages.nix`:
+Add to the allowlist in `shared/packages.nix`:
 ```nix
 nixpkgs.config.allowUnfreePredicate = pkg:
   builtins.elem (lib.getName pkg) [

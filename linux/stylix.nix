@@ -32,7 +32,7 @@
     };
 
     # Never auto-enable targets. All targets are opted in explicitly in
-    # common/shared/theme.nix and common/linux/theme.nix.
+    # shared/theme.nix and linux/theme.nix.
     autoEnable = false;
   };
 }

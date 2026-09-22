@@ -1,7 +1,7 @@
 _: {
   imports = [
-    ../common/shared
-    ../common/macos
+    ../shared
+    ../macos
   ];
 
   home = {
