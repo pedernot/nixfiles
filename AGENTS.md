@@ -77,16 +77,16 @@ deadnix --fail \
     nixos/hardware-configuration.nix \
     heisenberg/hardware-configuration.nix \
   -- .                      # Fail if unused Nix code is found
-statix check .              # Check Nix files with statix
+statix check --ignore '**/hardware-configuration.nix' .
 ```
 
 `deadnix` parses Nix source without evaluating or building the flake. No output
 means that it found no dead code. To remove findings automatically, run
 `deadnix --edit <path>`, inspect the diff, and format the changed files with
-Alejandra. The repository-wide check excludes the generated hardware
-configurations, which contain intentionally unused module arguments and should
-not be edited manually. The `--` separates the exclusion list from the path to
-check.
+Alejandra. The repository-wide deadnix and Statix checks exclude the generated
+hardware configurations, which contain expected generated patterns and should
+not be edited manually. In the deadnix command, `--` separates the exclusion
+list from the path to check.
 
 ### Pi Extension Verification
 
