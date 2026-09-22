@@ -71,16 +71,22 @@ nix develop
 ```bash
 fd -e nix -x alejandra {}   # Format all Nix files
 fd -e lua -x stylua {}      # Format all Lua files
-deadnix --fail -L .         # Fail if unused Nix code is found
+deadnix --fail \
+  --exclude \
+    lapping/hardware-configuration.nix \
+    nixos/hardware-configuration.nix \
+    heisenberg/hardware-configuration.nix \
+  -- .                      # Fail if unused Nix code is found
 statix check .              # Check Nix files with statix
 ```
 
 `deadnix` parses Nix source without evaluating or building the flake. No output
 means that it found no dead code. To remove findings automatically, run
 `deadnix --edit <path>`, inspect the diff, and format the changed files with
-Alejandra. The repository-wide check uses `-L` (`--no-lambda-pattern-names`)
-because NixOS modules and generated hardware configurations can have
-intentionally unused attrset arguments. Omit `-L` for a more aggressive check.
+Alejandra. The repository-wide check excludes the generated hardware
+configurations, which contain intentionally unused module arguments and should
+not be edited manually. The `--` separates the exclusion list from the path to
+check.
 
 ### Pi Extension Verification
 
