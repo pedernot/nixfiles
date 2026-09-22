@@ -103,20 +103,22 @@ in {
             packages = [pkgs.vimPlugins.telescope-undo-nvim];
           }
         ];
-        setupOpts.defaults.path_display = ["truncate"];
-        setupOpts.defaults.vimgrep_arguments = [
-          "${pkgs.ripgrep}/bin/rg"
-          "--color=never"
-          "--no-heading"
-          "--with-filename"
-          "--line-number"
-          "--column"
-          "--smart-case"
-        ];
-        setupOpts.defaults.mappings.i = {
-          "<C-j>" = "move_selection_next";
-          "<C-k>" = "move_selection_previous";
-          "<Esc>" = "close";
+        setupOpts.defaults = {
+          path_display = ["truncate"];
+          vimgrep_arguments = [
+            "${pkgs.ripgrep}/bin/rg"
+            "--color=never"
+            "--no-heading"
+            "--with-filename"
+            "--line-number"
+            "--column"
+            "--smart-case"
+          ];
+          mappings.i = {
+            "<C-j>" = "move_selection_next";
+            "<C-k>" = "move_selection_previous";
+            "<Esc>" = "close";
+          };
         };
         mappings = {
           open = "<C-p>";
@@ -209,12 +211,14 @@ in {
           };
           sources.default = ["lsp" "buffer" "path" "snippets"];
           cmdline.sources = ["path" "cmdline"];
-          completion.list.selection = {
-            preselect = false;
-            auto_insert = true;
+          completion = {
+            list.selection = {
+              preselect = false;
+              auto_insert = true;
+            };
+            accept.auto_brackets.enabled = false;
+            documentation.auto_show = true;
           };
-          completion.accept.auto_brackets.enabled = false;
-          completion.documentation.auto_show = true;
           signature.enabled = true; # replaces lsp-signature (incompatible with blink.cmp)
         };
       };
@@ -327,287 +331,312 @@ in {
         formatters_by_ft.kotlin = [];
       };
 
-      # Treesitter's Kotlin indent expression currently returns column zero
-      # for new lines. Use Neovim's Kotlin indent script instead.
-      luaConfigRC.kotlin-indent = ''
-        vim.api.nvim_create_autocmd("FileType", {
-          pattern = "kotlin",
-          callback = function()
-            vim.bo.indentexpr = "GetKotlinIndent()"
-            vim.bo.expandtab = true
-            vim.bo.shiftwidth = 4
-            vim.bo.softtabstop = 4
-            vim.bo.tabstop = 4
-          end,
-        })
-      '';
+      luaConfigRC = {
+        # Treesitter's Kotlin indent expression currently returns column zero
+        # for new lines. Use Neovim's Kotlin indent script instead.
+        kotlin-indent = ''
+          vim.api.nvim_create_autocmd("FileType", {
+            pattern = "kotlin",
+            callback = function()
+              vim.bo.indentexpr = "GetKotlinIndent()"
+              vim.bo.expandtab = true
+              vim.bo.shiftwidth = 4
+              vim.bo.softtabstop = 4
+              vim.bo.tabstop = 4
+            end,
+          })
+        '';
 
-      # nvf's synchronous format-on-save timeout is 500 ms. ktlint starts a
-      # JVM, so give Kotlin buffers enough time while preserving the existing
-      # timeout for faster formatters.
-      luaConfigRC.kotlin-format-timeout = ''
-        require("conform").setup({
-          format_on_save = function(bufnr)
-            if not vim.g.formatsave or vim.b[bufnr].disableFormatSave then
-              return
-            end
+        # nvf's synchronous format-on-save timeout is 500 ms. ktlint starts a
+        # JVM, so give Kotlin buffers enough time while preserving the existing
+        # timeout for faster formatters.
+        kotlin-format-timeout = ''
+          require("conform").setup({
+            format_on_save = function(bufnr)
+              if not vim.g.formatsave or vim.b[bufnr].disableFormatSave then
+                return
+              end
 
-            local timeout_ms = vim.bo[bufnr].filetype == "kotlin" and 5000 or 500
-            return { lsp_format = "fallback", timeout_ms = timeout_ms }
-          end,
-        })
-      '';
+              local timeout_ms = vim.bo[bufnr].filetype == "kotlin" and 5000 or 500
+              return { lsp_format = "fallback", timeout_ms = timeout_ms }
+            end,
+          })
+        '';
 
-      # Phase 6: Override Python conform formatters to use built-in ruff formatters.
-      # nvf's ruff and ruff-check don't pass --stdin-filename, so ruff can't find
-      # pyproject.toml and ignores project rules (including isort/I). Conform's
-      # built-in ruff_organize_imports and ruff_format pass --stdin-filename correctly.
-      luaConfigRC.python-format-override = ''
-        require("conform").formatters_by_ft.python = { "ruff_organize_imports", "ruff_format" }
-      '';
+        # Phase 6: Override Python conform formatters to use built-in ruff formatters.
+        # nvf's ruff and ruff-check don't pass --stdin-filename, so ruff can't find
+        # pyproject.toml and ignores project rules (including isort/I). Conform's
+        # built-in ruff_organize_imports and ruff_format pass --stdin-filename correctly.
+        python-format-override = ''
+          require("conform").formatters_by_ft.python = { "ruff_organize_imports", "ruff_format" }
+        '';
 
-      # Phase 6: LspAttach keymaps (buffer-local, can't use vim.keymaps)
-      # nvf's lsp.enable also adds <leader>lg* keymaps via its own LspAttach handler
-      luaConfigRC.lsp-attach = ''
-        vim.api.nvim_create_autocmd("LspAttach", {
-          group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-          callback = function(ev)
-            vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-            local bufopts = { noremap = true, silent = true, buffer = ev.buf }
-            vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-            vim.keymap.set("n", "gd", function()
-              vim.lsp.buf.definition({
-                on_list = function(options)
-                  local item = options.items[1]
-                  local uri = item and item.user_data and item.user_data.uri
-                  local scheme = uri and uri:match("^([%w+.-]+):")
+        # Phase 6: LspAttach keymaps (buffer-local, can't use vim.keymaps)
+        # nvf's lsp.enable also adds <leader>lg* keymaps via its own LspAttach handler
+        lsp-attach = ''
+          vim.api.nvim_create_autocmd("LspAttach", {
+            group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+            callback = function(ev)
+              vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+              local bufopts = { noremap = true, silent = true, buffer = ev.buf }
+              vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+              vim.keymap.set("n", "gd", function()
+                vim.lsp.buf.definition({
+                  on_list = function(options)
+                    local item = options.items[1]
+                    local uri = item and item.user_data and item.user_data.uri
+                    local scheme = uri and uri:match("^([%w+.-]+):")
 
-                  if #options.items == 1 and scheme == "jdt" then
-                    local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "jdt-language-server" })
-                    local client = clients[1]
-                    if not client then
-                      vim.notify("JDT language server is not attached", vim.log.levels.ERROR)
-                      return
-                    end
-
-                    client:request("java/classFileContents", { uri = uri }, function(err, result)
-                      if err or not result then
-                        vim.notify(
-                          "Java class loading failed: " .. (err and err.message or "no source returned"),
-                          vim.log.levels.ERROR
-                        )
+                    if #options.items == 1 and scheme == "jdt" then
+                      local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "jdt-language-server" })
+                      local client = clients[1]
+                      if not client then
+                        vim.notify("JDT language server is not attached", vim.log.levels.ERROR)
                         return
                       end
 
-                      local bufnr = vim.uri_to_bufnr(uri)
-                      vim.bo[bufnr].modifiable = true
-                      local source = result:gsub("\r\n", "\n")
-                      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split(source, "\n", { plain = true }))
-                      vim.bo[bufnr].buftype = "nofile"
-                      vim.bo[bufnr].buflisted = true
-                      vim.bo[bufnr].swapfile = false
-                      vim.bo[bufnr].filetype = "java"
-                      vim.bo[bufnr].modifiable = false
-                      vim.api.nvim_set_current_buf(bufnr)
+                      client:request("java/classFileContents", { uri = uri }, function(err, result)
+                        if err or not result then
+                          vim.notify(
+                            "Java class loading failed: " .. (err and err.message or "no source returned"),
+                            vim.log.levels.ERROR
+                          )
+                          return
+                        end
 
-                      local range = item.user_data.range
-                      if range then
-                        vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
-                      end
-                    end, ev.buf)
-                    return
-                  end
+                        local bufnr = vim.uri_to_bufnr(uri)
+                        vim.bo[bufnr].modifiable = true
+                        local source = result:gsub("\r\n", "\n")
+                        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split(source, "\n", { plain = true }))
+                        vim.bo[bufnr].buftype = "nofile"
+                        vim.bo[bufnr].buflisted = true
+                        vim.bo[bufnr].swapfile = false
+                        vim.bo[bufnr].filetype = "java"
+                        vim.bo[bufnr].modifiable = false
+                        vim.api.nvim_set_current_buf(bufnr)
 
-                  if #options.items == 1 and (scheme == "jar" or scheme == "jrt") then
-                    local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "kotlin-lsp" })
-                    local client = clients[1]
-                    if not client then
-                      vim.notify("Kotlin LSP is not attached", vim.log.levels.ERROR)
+                        local range = item.user_data.range
+                        if range then
+                          vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
+                        end
+                      end, ev.buf)
                       return
                     end
 
-                    client:request("workspace/executeCommand", {
-                      command = "decompile",
-                      arguments = { uri },
-                    }, function(err, result)
-                      if err or not result or not result.code then
-                        vim.notify(
-                          "Kotlin decompilation failed: " .. (err and err.message or "no source returned"),
-                          vim.log.levels.ERROR
-                        )
+                    if #options.items == 1 and (scheme == "jar" or scheme == "jrt") then
+                      local clients = vim.lsp.get_clients({ bufnr = ev.buf, name = "kotlin-lsp" })
+                      local client = clients[1]
+                      if not client then
+                        vim.notify("Kotlin LSP is not attached", vim.log.levels.ERROR)
                         return
                       end
 
-                      local bufnr = vim.uri_to_bufnr(uri)
-                      vim.bo[bufnr].modifiable = true
-                      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split(result.code, "\n", { plain = true }))
-                      vim.bo[bufnr].buftype = "nofile"
-                      vim.bo[bufnr].buflisted = true
-                      vim.bo[bufnr].swapfile = false
-                      vim.bo[bufnr].filetype = result.language or "kotlin"
-                      vim.bo[bufnr].modifiable = false
-                      vim.api.nvim_set_current_buf(bufnr)
+                      client:request("workspace/executeCommand", {
+                        command = "decompile",
+                        arguments = { uri },
+                      }, function(err, result)
+                        if err or not result or not result.code then
+                          vim.notify(
+                            "Kotlin decompilation failed: " .. (err and err.message or "no source returned"),
+                            vim.log.levels.ERROR
+                          )
+                          return
+                        end
 
-                      local range = item.user_data.range
-                      if range then
-                        vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
-                      end
-                    end, ev.buf)
-                    return
-                  end
+                        local bufnr = vim.uri_to_bufnr(uri)
+                        vim.bo[bufnr].modifiable = true
+                        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split(result.code, "\n", { plain = true }))
+                        vim.bo[bufnr].buftype = "nofile"
+                        vim.bo[bufnr].buflisted = true
+                        vim.bo[bufnr].swapfile = false
+                        vim.bo[bufnr].filetype = result.language or "kotlin"
+                        vim.bo[bufnr].modifiable = false
+                        vim.api.nvim_set_current_buf(bufnr)
 
-                  vim.fn.setqflist({}, " ", options)
-                  if #options.items == 1 then
-                    vim.cmd.cfirst()
-                  else
-                    vim.cmd.copen()
-                  end
-                end,
-              })
-            end, bufopts)
-            vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-            vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
-            local client = vim.lsp.get_client_by_id(ev.data.client_id)
-            if client and client.name == "jdt-language-server" then
-              client.server_capabilities.documentFormattingProvider = false
-              client.server_capabilities.documentRangeFormattingProvider = false
-            end
-            vim.keymap.set("n", "<space>f", function()
-              require("conform").format({
-                async = true,
-                lsp_format = "fallback",
-              })
-            end, bufopts)
-          end,
-        })
-      '';
+                        local range = item.user_data.range
+                        if range then
+                          vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
+                        end
+                      end, ev.buf)
+                      return
+                    end
 
-      # Phase 6: Servers without nvf language modules + hadolint + hover.nvim
-      # package.path hacks removed — lazy.nvim is gone, startPlugins work via normal rtp
-      luaConfigRC.lsp-custom = ''
-        -- dockerls
-        vim.lsp.config("dockerls", {
-          settings = {
-            docker = {
-              languageserver = {
-                formatter = { ignoreMultilineInstructions = true },
+                    vim.fn.setqflist({}, " ", options)
+                    if #options.items == 1 then
+                      vim.cmd.cfirst()
+                    else
+                      vim.cmd.copen()
+                    end
+                  end,
+                })
+              end, bufopts)
+              vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+              vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
+              local client = vim.lsp.get_client_by_id(ev.data.client_id)
+              if client and client.name == "jdt-language-server" then
+                client.server_capabilities.documentFormattingProvider = false
+                client.server_capabilities.documentRangeFormattingProvider = false
+              end
+              vim.keymap.set("n", "<space>f", function()
+                require("conform").format({
+                  async = true,
+                  lsp_format = "fallback",
+                })
+              end, bufopts)
+            end,
+          })
+        '';
+
+        # Phase 6: Servers without nvf language modules + hadolint + hover.nvim
+        # package.path hacks removed — lazy.nvim is gone, startPlugins work via normal rtp
+        lsp-custom = ''
+          -- dockerls
+          vim.lsp.config("dockerls", {
+            settings = {
+              docker = {
+                languageserver = {
+                  formatter = { ignoreMultilineInstructions = true },
+                },
               },
             },
-          },
-        })
-        vim.lsp.enable("dockerls")
+          })
+          vim.lsp.enable("dockerls")
 
-        -- ty (Python type checker, no built-in neovim config)
-        vim.lsp.config("ty", {
-          cmd = { "ty", "server" },
-          filetypes = { "python" },
-          root_markers = { "pyproject.toml", "ty.toml", ".git" },
-          settings = { ty = { experimental = { autoImport = true, rename = true } } },
-        })
-        vim.lsp.enable("ty")
+          -- ty (Python type checker, no built-in neovim config)
+          vim.lsp.config("ty", {
+            cmd = { "ty", "server" },
+            filetypes = { "python" },
+            root_markers = { "pyproject.toml", "ty.toml", ".git" },
+            settings = { ty = { experimental = { autoImport = true, rename = true } } },
+          })
+          vim.lsp.enable("ty")
 
-        -- cue, mojo
-        vim.lsp.enable("cue")
-        vim.lsp.enable("mojo")
+          -- cue, mojo
+          vim.lsp.enable("cue")
+          vim.lsp.enable("mojo")
 
-        -- hls custom settings (nvf enables it, we override)
-        vim.lsp.config("hls", {
-          filetypes = { "haskell", "lhaskell", "cabal" },
-          settings = {
-            haskell = {
-              cabalFormattingProvider = "cabal-fmt",
-              formattingProvider = "ormolu",
-              plugin = { hlint = { diagnosticsOn = false } },
+          -- hls custom settings (nvf enables it, we override)
+          vim.lsp.config("hls", {
+            filetypes = { "haskell", "lhaskell", "cabal" },
+            settings = {
+              haskell = {
+                cabalFormattingProvider = "cabal-fmt",
+                formattingProvider = "ormolu",
+                plugin = { hlint = { diagnosticsOn = false } },
+              },
             },
-          },
-        })
+          })
 
-        -- Hadolint via none-ls (no docker language module in nvf)
-        local null_ls = require("null-ls")
-        null_ls.setup({
-          sources = { null_ls.builtins.diagnostics.hadolint },
-        })
+          -- Hadolint via none-ls (no docker language module in nvf)
+          local null_ls = require("null-ls")
+          null_ls.setup({
+            sources = { null_ls.builtins.diagnostics.hadolint },
+          })
 
-        -- hover.nvim
-        require("hover").setup({
-          init = function() require("hover.providers.lsp") end,
-          preview_opts = { border = nil },
-          title = true,
-          providers = {
-            { module = "hover.providers.lsp", priority = 1001 },
-            { module = "hover.providers.diagnostic", priority = 1000 },
-          },
-        })
-        vim.keymap.set("n", "<C-y>", require("hover").hover, { desc = "hover.nvim" })
-      '';
+          -- hover.nvim
+          require("hover").setup({
+            init = function() require("hover.providers.lsp") end,
+            preview_opts = { border = nil },
+            title = true,
+            providers = {
+              { module = "hover.providers.lsp", priority = 1001 },
+              { module = "hover.providers.diagnostic", priority = 1000 },
+            },
+          })
+          vim.keymap.set("n", "<C-y>", require("hover").hover, { desc = "hover.nvim" })
+        '';
 
-      # Phase 9-11: Plugin setup (VCS, UI, mini, gitsigns text object)
-      luaConfigRC.plugins-setup = ''
-        -- Phase 9: VCS
-        require("hunk").setup()
-        require("jj").setup({})
-        require("litee.lib").setup()
-        require("litee.gh").setup()
+        # Phase 9-11: Plugin setup (VCS, UI, mini, gitsigns text object)
+        plugins-setup = ''
+          -- Phase 9: VCS
+          require("hunk").setup()
+          require("jj").setup({})
+          require("litee.lib").setup()
+          require("litee.gh").setup()
 
-        -- Phase 9: Gitsigns text object (nvf sets global keymaps; this adds the text object)
-        vim.keymap.set({"o", "x"}, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+          -- Phase 9: Gitsigns text object (nvf sets global keymaps; this adds the text object)
+          vim.keymap.set({"o", "x"}, "ih", ":<C-U>Gitsigns select_hunk<CR>")
 
-        -- Phase 10: UI
-        require("bufferline").setup({ options = { diagnostics = "nvim_lsp" } })
-        require("neoscroll").setup({
-          hide_cursor = false,
-          mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-e>", "zt", "zz", "zb" },
-        })
-        require("dressing").setup({})
+          -- Phase 10: UI
+          require("bufferline").setup({ options = { diagnostics = "nvim_lsp" } })
+          require("neoscroll").setup({
+            hide_cursor = false,
+            mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-e>", "zt", "zz", "zb" },
+          })
+          require("dressing").setup({})
 
-        -- Phase 11: mini.nvim
-        require("mini.ai").setup()
-        require("mini.indentscope").setup()
-        require("mini.bufremove").setup()
-      '';
+          -- Phase 11: mini.nvim
+          require("mini.ai").setup()
+          require("mini.indentscope").setup()
+          require("mini.bufremove").setup()
+        '';
 
-      luaConfigRC.theme = ''
-        vim.g.tinted_colorspace = 256
-        vim.cmd("colorscheme base16-harmonic16-dark")
-      '';
+        theme = ''
+          vim.g.tinted_colorspace = 256
+          vim.cmd("colorscheme base16-harmonic16-dark")
+        '';
 
-      # Phase 13: After/syntax customizations
-      # Previously in nvim/after/syntax/{markdown,python}.vim — converted to Syntax autocmds
-      # so the nvim/ directory can be removed in phase 14.
-      # The Syntax event fires after the filetype's syntax file is loaded (same timing as after/syntax/).
-      luaConfigRC.after-syntax = ''
-        -- markdown: YAML frontmatter highlighting
-        vim.api.nvim_create_autocmd("Syntax", {
-          pattern = "markdown",
-          group = vim.api.nvim_create_augroup("after_syntax_markdown", { clear = true }),
-          callback = function()
-            vim.cmd([[
-              if exists("b:current_syntax") | unlet b:current_syntax | endif
-              syntax include @Yaml syntax/yaml.vim
-              syntax region yamlFrontmatter start=/\%^---$/ end=/^---$/ keepend contains=@Yaml
-            ]])
-          end,
-        })
+        # Phase 13: After/syntax customizations
+        # Previously in nvim/after/syntax/{markdown,python}.vim — converted to Syntax autocmds
+        # so the nvim/ directory can be removed in phase 14.
+        # The Syntax event fires after the filetype's syntax file is loaded (same timing as after/syntax/).
+        after-syntax = ''
+          -- markdown: YAML frontmatter highlighting
+          vim.api.nvim_create_autocmd("Syntax", {
+            pattern = "markdown",
+            group = vim.api.nvim_create_augroup("after_syntax_markdown", { clear = true }),
+            callback = function()
+              vim.cmd([[
+                if exists("b:current_syntax") | unlet b:current_syntax | endif
+                syntax include @Yaml syntax/yaml.vim
+                syntax region yamlFrontmatter start=/\%^---$/ end=/^---$/ keepend contains=@Yaml
+              ]])
+            end,
+          })
 
-        -- python: kwargs, match/case keywords, constants, dunders
-        vim.api.nvim_create_autocmd("Syntax", {
-          pattern = "python",
-          group = vim.api.nvim_create_augroup("after_syntax_python", { clear = true }),
-          callback = function()
-            vim.cmd([[
-              syntax match PythonKwArg "\v[\(\,]\_s?\s{-}\zs\w+\ze\=(\=)@!"
-              syntax match PythonKwArg "\v^\s{-}\zs\w+\ze\=(\=)@!"
-              syn keyword PythonMatch match case
-              syn match PythonConstant /\<[A-Z_][A-Z_0-9]*\>/
-              syn match PythonDunder "__\w*__"
-              hi def link PythonKwArg Special
-              hi def link PythonConstant Constant
-              hi def link PythonDunder PreProc
-              hi def link PythonMatch Conditional
-            ]])
-          end,
-        })
-      '';
+          -- python: kwargs, match/case keywords, constants, dunders
+          vim.api.nvim_create_autocmd("Syntax", {
+            pattern = "python",
+            group = vim.api.nvim_create_augroup("after_syntax_python", { clear = true }),
+            callback = function()
+              vim.cmd([[
+                syntax match PythonKwArg "\v[\(\,]\_s?\s{-}\zs\w+\ze\=(\=)@!"
+                syntax match PythonKwArg "\v^\s{-}\zs\w+\ze\=(\=)@!"
+                syn keyword PythonMatch match case
+                syn match PythonConstant /\<[A-Z_][A-Z_0-9]*\>/
+                syn match PythonDunder "__\w*__"
+                hi def link PythonKwArg Special
+                hi def link PythonConstant Constant
+                hi def link PythonDunder PreProc
+                hi def link PythonMatch Conditional
+              ]])
+            end,
+          })
+        '';
+
+        options-extra = ''
+          vim.opt.shortmess:append("I")
+          vim.opt.wildignore:append("*.swp,*~,._*,*.pyc,__pycache__")
+          vim.opt.wildignore:append("*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem")
+          vim.opt.wildignore:append("*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz")
+
+          vim.diagnostic.config({
+            virtual_text = true,
+            signs = true,
+            underline = true,
+            update_in_insert = false,
+            severity_sort = true,
+          })
+        '';
+
+        custom-commands = ''
+          vim.api.nvim_create_user_command("W", "w", {})
+          vim.api.nvim_create_user_command("Wq", "wq", {})
+          vim.api.nvim_create_user_command("WQ", "wq", {})
+          vim.api.nvim_create_user_command("Wqa", "wqa", {})
+          vim.api.nvim_create_user_command("SQL", "enew | setlocal buftype=nofile | setlocal ft=pgsql", {})
+        '';
+      };
 
       # Phase 1: Options
       globals = {
@@ -644,21 +673,6 @@ in {
         hidden = true;
         completeopt = "menu,menuone,noselect";
       };
-
-      luaConfigRC.options-extra = ''
-        vim.opt.shortmess:append("I")
-        vim.opt.wildignore:append("*.swp,*~,._*,*.pyc,__pycache__")
-        vim.opt.wildignore:append("*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem")
-        vim.opt.wildignore:append("*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz")
-
-        vim.diagnostic.config({
-          virtual_text = true,
-          signs = true,
-          underline = true,
-          update_in_insert = false,
-          severity_sort = true,
-        })
-      '';
 
       # Phase 2: Keymaps
       keymaps = [
@@ -938,15 +952,6 @@ in {
           command = "set filetype=helm";
         }
       ];
-
-      # Phase 3: Custom commands
-      luaConfigRC.custom-commands = ''
-        vim.api.nvim_create_user_command("W", "w", {})
-        vim.api.nvim_create_user_command("Wq", "wq", {})
-        vim.api.nvim_create_user_command("WQ", "wq", {})
-        vim.api.nvim_create_user_command("Wqa", "wqa", {})
-        vim.api.nvim_create_user_command("SQL", "enew | setlocal buftype=nofile | setlocal ft=pgsql", {})
-      '';
 
       # luaConfigRC.existing-config removed — lazy.nvim bootstrap no longer needed.
       # All plugins now managed by nvf startPlugins and nvf module system.
