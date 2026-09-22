@@ -69,8 +69,8 @@ nix develop
 ### Format All Files
 
 ```bash
-fd -e nix -x alejandra {}   # Format all Nix files
-fd -e lua -x stylua {}      # Format all Lua files
+alejandra .                  # Format all Nix files
+stylua .                     # Format all Lua files
 deadnix --fail \
   --exclude \
     lapping/hardware-configuration.nix \
