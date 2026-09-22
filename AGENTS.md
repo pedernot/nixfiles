@@ -49,6 +49,12 @@ Enter the repository development shell before running the formatting and linting
 nix develop
 ```
 
+Run all repository checks with:
+
+```bash
+check
+```
+
 ### Formatters (format-on-save enabled in Neovim)
 
 | Language | Formatter | Command |

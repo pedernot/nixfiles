@@ -38,10 +38,31 @@
         "aarch64-darwin"
       ] (system: let
         pkgs = import nixpkgs {inherit system;};
+        check = pkgs.writeShellApplication {
+          name = "check";
+          runtimeInputs = with pkgs; [
+            alejandra
+            deadnix
+            statix
+            stylua
+          ];
+          text = ''
+            alejandra --check .
+            stylua --check .
+            deadnix --fail \
+              --exclude \
+                lapping/hardware-configuration.nix \
+                nixos/hardware-configuration.nix \
+                heisenberg/hardware-configuration.nix \
+              -- .
+            statix check --ignore '**/hardware-configuration.nix' .
+          '';
+        };
       in {
         default = pkgs.mkShell {
           packages = with pkgs; [
             alejandra
+            check
             deadnix
             nixd
             shellcheck
