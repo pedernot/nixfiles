@@ -1,0 +1,58 @@
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+export EDITOR="nvim"
+export COMPOSE_BAKE="true"
+export DO_NOT_TRACK="1"
+export PIPENV_VENV_IN_PROJECT="1"
+export PYRIGHT_PYTHON_IGNORE_WARNINGS="1"
+export TINTED_TMUX_OPTION_STATUSBAR="1"
+
+path=("$HOME/.local/bin" $path)
+
+brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
+if [[ -d "$brew_prefix/opt/openjdk@25/libexec/openjdk.jdk/Contents/Home" ]]; then
+  export JAVA_HOME="$brew_prefix/opt/openjdk@25/libexec/openjdk.jdk/Contents/Home"
+  path=("$JAVA_HOME/bin" $path)
+fi
+unset brew_prefix
+
+setopt INC_APPEND_HISTORY AUTO_CD EXTENDED_GLOB PROMPT_SUBST NO_HUP NO_BEEP NO_NOMATCH NO_NOTIFY
+bindkey -v
+
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias mkdir="mkdir -p -v"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias tree="tree -C"
+alias https="xh --default-scheme=https"
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias wget="wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'"
+alias j="zi"
+
+tnew() {
+  tmux new-session -A -s "${PWD:t}"
+}
+
+autoload -Uz compinit
+mkdir -p "$XDG_CACHE_HOME/zsh"
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+
+export FZF_DEFAULT_COMMAND="fd --type d"
+
+NIXFILES_ROOT="${NIXFILES_ROOT:-$HOME/workspace/nixfiles}"
+source "$NIXFILES_ROOT/zsh/functions.zsh"
+source "$NIXFILES_ROOT/zsh/zshrc"
+
+eval "$(direnv hook zsh)"
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+
+if [[ -r /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi

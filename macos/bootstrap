@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+readonly script_dir
+repo_dir="$(cd "$script_dir/.." && pwd -P)"
+readonly repo_dir
+readonly brewfile="$script_dir/Brewfile"
+
+fail() {
+  printf 'error: %s\n' "$*" >&2
+  exit 1
+}
+
+link_file() {
+  local source=$1
+  local target=$2
+
+  mkdir -p "$(dirname "$target")"
+
+  if [[ -L "$target" ]]; then
+    if [[ "$(readlink "$target")" == "$source" ]]; then
+      printf 'linked: %s\n' "$target"
+      return
+    fi
+    fail "$target is already a symlink to a different source"
+  fi
+
+  [[ ! -e "$target" ]] || fail "$target already exists; move it aside before bootstrapping"
+  ln -s "$source" "$target"
+  printf 'created: %s -> %s\n' "$target" "$source"
+}
+
+[[ "$(uname -s)" == "Darwin" ]] || fail "this bootstrap is for macOS"
+[[ "$(uname -m)" == "arm64" ]] || fail "this bootstrap is for Apple Silicon"
+command -v brew >/dev/null || fail "Homebrew must be installed first"
+
+brew bundle install --no-upgrade --file="$brewfile"
+
+link_file "$script_dir/dotfiles/zshenv" "$HOME/.zshenv"
+link_file "$script_dir/dotfiles/zshrc" "$HOME/.config/zsh/.zshrc"
+link_file "$script_dir/dotfiles/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+link_file "$repo_dir/nvim" "$HOME/.config/nvim"
+
+printf '\nHomebrew packages, portable dotfiles, and Neovim are ready.\n'
+printf 'Neovim will install its pinned plugins on first launch.\n'
+printf 'Known gaps are documented in %s.\n' "$script_dir/NON_NIX.md"

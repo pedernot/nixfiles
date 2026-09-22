@@ -9,7 +9,7 @@ function fkill() {
 }
 
 function _update_agents {
-  local force cooldown socket
+  local force cooldown socket timeout_cmd
 
   force=${1:-0}
   cooldown=60
@@ -17,7 +17,13 @@ function _update_agents {
   [[ -n "$SSH_CONNECTION" ]] && return
   (( $+commands[gpg-connect-agent] )) || return
   (( $+commands[gpgconf] )) || return
-  (( $+commands[timeout] )) || return
+  if (( $+commands[timeout] )); then
+    timeout_cmd=timeout
+  elif (( $+commands[gtimeout] )); then
+    timeout_cmd=gtimeout
+  else
+    return
+  fi
 
   typeset -gi _AGENTS_LAST_REFRESH
   if (( force == 0 )) && (( EPOCHSECONDS - _AGENTS_LAST_REFRESH < cooldown )); then
@@ -29,14 +35,14 @@ function _update_agents {
   SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
   [[ -n "$SSH_AUTH_SOCK" ]] || return
 
-  if ! timeout -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null; then
+  if ! "$timeout_cmd" -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null; then
     echo "Removing stale GPG agent"
     socket="$(gpgconf --list-dirs agent-socket)"
     test -S "$socket" && rm "$socket"
     if (( $+commands[killall] )); then
       killall -KILL gpg-agent 2>/dev/null
     fi
-    timeout -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null
+    "$timeout_cmd" -k 2 1 gpg-connect-agent updatestartuptty /bye > /dev/null
   fi
 }
 

@@ -14,3 +14,6 @@ nix run .#home-manager -- switch --flake '.#peder@macbook'
 ```
 
 Subsequent updates use the same command from the repository directory.
+
+If `/nix` cannot exist on the Mac, use the Homebrew and managed-dotfile
+fallback documented in [macos/NON_NIX.md](macos/NON_NIX.md).
