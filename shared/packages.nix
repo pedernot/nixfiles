@@ -7,7 +7,6 @@
     config.allowUnfreePredicate = pkg:
       builtins.elem (lib.getName pkg) [
         "spotify"
-        "claude-code"
         "discord"
         "discord-unwrapped"
         "todo.txt-vim"
@@ -17,27 +16,16 @@
   };
   home.packages = with pkgs; [
     alejandra
-    ansible-lint
-    ast-grep
-    awscli2
-    claude-code
     codex
     ctags
     difftastic
     dig
-    dockerfile-language-server
     entr
-    exiftool
     fastmod
     fd
     gnumake
     go
-    hadolint
-    helmfile
-    hledger
     jq
-    k9s
-    kafkactl
     kubectx
     kubelogin
     kubelogin-oidc
@@ -45,32 +33,22 @@
     lsof
     lua5_1
     luarocks
-    lynx
-    mkcert
     nixd
     nodejs
     openssl
-    ormolu
     pi-coding-agent
-    postgresql
     readline
     ripgrep
     rsync
     shellcheck
-    skaffold
     slides
-    sops
     statix
-    stern
     stylua
-    tokei
     tree
-    units
     unzip
     urlscan
     wget
     xh
     yq
-    yt-dlp
   ];
 }
