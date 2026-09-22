@@ -138,9 +138,11 @@
   mkPurelymailAccount = {
     syncGroup,
     statusColor,
+    primary ? false,
   }:
     commonMailAccount
     // {
+      inherit primary;
       flavor = "plain";
       address = "peder.notto@galte.land";
       userName = "peder.notto@galte.land";
@@ -184,18 +186,10 @@ in {
     maildirBasePath = "${config.xdg.dataHome}/mail";
 
     accounts = {
-      gmail-jotta = mkGmailAccount {
+      purelymail = mkPurelymailAccount {
         primary = true;
-        address = "peder.galteland@jottagroup.no";
-        userName = "peder.galteland@jottagroup.no";
-        passwordCommand = "gmail-jotta-app-pw";
-        maildirPath = "gmail-jotta";
-        syncGroup = "sync-gmail-jotta";
-        patterns = [
-          "INBOX"
-          "jira"
-        ];
-        statusColor = "color6";
+        syncGroup = "sync-purelymail";
+        statusColor = "magenta";
       };
 
       gmail-personal = mkGmailAccount {
@@ -206,11 +200,6 @@ in {
         syncGroup = "sync-gmail-personal";
         patterns = ["INBOX"];
         statusColor = "green";
-      };
-
-      purelymail = mkPurelymailAccount {
-        syncGroup = "sync-purelymail";
-        statusColor = "magenta";
       };
     };
   };
@@ -400,9 +389,8 @@ in {
 
         color sidebar_new color221 color233
 
-        macro index,pager 1 "<change-folder> =../gmail-jotta/inbox<enter>"
-        macro index,pager 2 "<change-folder> =../purelymail/inbox<enter>"
-        macro index,pager 3 "<change-folder> =../gmail-personal/inbox<enter>"
+        macro index,pager 1 "<change-folder> =../purelymail/inbox<enter>"
+        macro index,pager 2 "<change-folder> =../gmail-personal/inbox<enter>"
       '';
     };
 
@@ -420,7 +408,7 @@ in {
       extraConfig.user = {
         name = "Peder Notto Galteland";
         primary_email = "peder.notto@galte.land";
-        other_email = "peder.galteland@jottagroup.no;pederng@gmail.com;";
+        other_email = "pederng@gmail.com;";
       };
     };
 

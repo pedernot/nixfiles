@@ -16,9 +16,8 @@ This repository manages the mail stack through Home Manager.
 
 The current accounts are:
 
-- `gmail-jotta` (primary)
-- `gmail-personal`
-- `purelymail`
+- `purelymail` (primary)
+- `gmail-personal` 
 
 `linux/email.nix` is the source of truth for:
 
@@ -64,7 +63,6 @@ Home Manager generates:
 
 - `mbsync` state compatibility depends on channel names staying stable.
 - The current channel names intentionally preserve the legacy names:
-  - `sync-gmail-jotta-*`
   - `sync-gmail-personal-*`
   - `sync-purelymail-*`
 - `neomutt` uses `msmtp` directly, not `msmtpq`.
