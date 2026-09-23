@@ -15,7 +15,6 @@
       ];
   };
   home.packages = with pkgs; [
-    codex
     ctags
     difftastic
     dig

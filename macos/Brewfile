@@ -59,5 +59,3 @@ brew "zoxide"
 brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 brew "jetbrains/utils/kotlin-lsp"
-
-cask "codex"
