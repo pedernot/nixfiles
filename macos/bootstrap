@@ -41,6 +41,9 @@ brew bundle install --no-upgrade --file="$brewfile"
 link_file "$script_dir/dotfiles/zshenv" "$HOME/.zshenv"
 link_file "$script_dir/dotfiles/zshrc" "$HOME/.config/zsh/.zshrc"
 link_file "$script_dir/dotfiles/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+link_file "$script_dir/dotfiles/git/config" "$HOME/.config/git/config"
+link_file "$script_dir/dotfiles/git/ignore" "$HOME/.config/git/ignore"
+link_file "$script_dir/dotfiles/jj/config.toml" "$HOME/.config/jj/config.toml"
 link_file "$repo_dir/nvim" "$HOME/.config/nvim"
 
 printf '\nHomebrew packages, portable dotfiles, and Neovim are ready.\n'

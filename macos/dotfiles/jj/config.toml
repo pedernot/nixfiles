@@ -1,0 +1,33 @@
+[aliases]
+al = ["log", "-r", "all()"]
+l = ["log", "-r", "(trunk()..@):: | (trunk()..@)-"]
+stack = ["rebase", "--after", "trunk()", "--before", "closest_merge(@)", "--revision"]
+stage = ["stack", "closest_merge(@).. ~ empty()"]
+
+[fix.tools.ruff-fix]
+command = ["ruff", "check", "--fix"]
+patterns = ["glob:'**/*.py'"]
+
+[fix.tools.ruff-format]
+command = ["ruff", "format"]
+patterns = ["glob:'**/*.py'"]
+
+[revset-aliases]
+"closest_merge(to)" = "heads(::to & merges())"
+
+[signing]
+backend = "gpg"
+key = "4980821A221FE5B1"
+
+[templates]
+git_push_bookmark = "'pedernot/push-' ++ change_id.short()"
+
+[ui]
+default-command = "log"
+diff-editor = ["nvim", "-c", "DiffEditor $left $right $output"]
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
+pager = ":builtin"
+
+[user]
+email = "peder.galteland@jottagroup.no"
+name = "Peder Notto Galteland"

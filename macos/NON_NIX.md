@@ -13,17 +13,24 @@ Install Homebrew, clone this repository to `~/workspace/nixfiles`, and run:
 
 The bootstrap installs `macos/Brewfile` without upgrading packages already
 installed by Homebrew. It then creates symlinks for the portable Zsh, tmux,
-and Neovim configuration. Existing non-symlink files are never overwritten.
+Git, Jujutsu, and Neovim configuration. Existing non-symlink files are never
+overwritten.
 
 Neovim uses the conventional Lua configuration in `nvim/`, with lazy.nvim and
 the committed `nvim/lazy-lock.json`. Plugins are downloaded on first launch.
 The configuration mirrors the main NVF setup, but is independent of Nix so it
 can also be tested on Linux with a recent Neovim.
 
+The Git configuration delegates GitHub credentials to `gh`. Run `gh auth
+login` once on the Mac before using authenticated GitHub remotes. The Git and
+Jujutsu identity and signing-key ID are configured, but the private GPG key is
+not provisioned by this repository.
+
 ## Deliberate gaps
 
-- Git and Jujutsu are installed, but their Home Manager-generated settings
-  still need portable source files.
-- Home Manager-managed terminal application settings, themes, completions,
-  tmux plugins, and services are not yet represented.
+- These Home Manager-managed tmux plugins are not ported:
+  - `tmux-thumbs`, including its custom alphabet and colors.
+  - `tmux-fzf`, including its `w` binding for `choose-tree -Z`.
+- Other Home Manager-managed terminal application settings, themes,
+  completions, and services are not yet represented.
 - Secrets and private keys are intentionally not provisioned.

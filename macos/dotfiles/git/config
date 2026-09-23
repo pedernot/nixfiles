@@ -1,0 +1,70 @@
+[alias]
+	a = add
+	amend = commit --amend -C HEAD
+	b = branch
+	c = commit
+	co = checkout
+	compare = diff master...HEAD
+	files = !git diff --name-only $(git merge-base HEAD master)
+	graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	listfiles = diff-tree --no-commit-id --name-only -r
+	mergelog = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --merges
+	oneline = log --pretty=oneline
+	ss = status -sb
+	st = status
+	stash-all = stash save --include-untracked
+	stat = !git diff --stat $(git merge-base HEAD master)
+
+[commit]
+	gpgsign = false
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[diff]
+	algorithm = histogram
+	external = difft --background dark --color always
+
+[gpg]
+	format = openpgp
+
+[gpg "openpgp"]
+	program = gpg
+
+[interactive]
+	colorMoved = default
+
+[merge]
+	conflictStyle = zdiff3
+	tool = nvim
+
+[mergetool]
+	keepBackup = false
+
+[mergetool "nvim"]
+	cmd = nvim -f -c "Gdiffsplit!" "$MERGED"
+
+[pull]
+	rebase = false
+
+[push]
+	default = current
+
+[remote "origin"]
+	prune = true
+
+[status]
+	showUntrackedFiles = all
+
+[user]
+	email = peder.galteland@jottagroup.no
+	name = Peder Notto Galteland
+	signingKey = 4980821A221FE5B1
+
+[web]
+	browser = open
