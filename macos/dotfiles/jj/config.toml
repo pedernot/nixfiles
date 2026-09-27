@@ -29,5 +29,5 @@ diff-formatter = ["difft", "--color=always", "$left", "$right"]
 pager = ":builtin"
 
 [user]
-email = "peder.galteland@jottagroup.no"
+email = "peder.notto@galte.land"
 name = "Peder Notto Galteland"

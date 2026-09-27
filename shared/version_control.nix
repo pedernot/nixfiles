@@ -19,7 +19,7 @@
           default-command = "log";
         };
         user = {
-          email = "peder.galteland@jottagroup.no";
+          email = "peder.notto@galte.land";
           name = "Peder Notto Galteland";
         };
         signing = {
@@ -48,7 +48,7 @@
       settings = {
         user = {
           name = "Peder Notto Galteland";
-          email = "peder.galteland@jottagroup.no";
+          email = "peder.notto@galte.land";
           signingKey = "4980821A221FE5B1";
         };
         interactive.colorMoved = "default";
