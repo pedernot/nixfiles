@@ -57,9 +57,6 @@
         Defaults use_pty
       '';
     };
-    pki.certificateFiles = [
-      ./jotta_ca.cert
-    ];
   };
 
   virtualisation.docker.enable = true;
