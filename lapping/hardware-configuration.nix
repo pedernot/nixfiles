@@ -12,51 +12,50 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "vmd" "nvme" "usbhid" "usb_storage" "sd_mod" "i915"];
-  boot.initrd.kernelModules = [];
+  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc"];
+  boot.initrd.kernelModules = ["dm-snapshot"];
   boot.kernelModules = ["kvm-intel"];
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/116e2517-d0fc-4eaf-884e-2a4dd9f2a052";
+    device = "/dev/disk/by-uuid/a52dda5f-70f8-4bf6-a62d-ff7b52798bf0";
     fsType = "btrfs";
-    options = ["subvol=root"];
+    options = ["subvol=root" "compress=zstd" "noatime"];
   };
 
-  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/5aad2f97-010e-4066-8536-42c8834ac71b";
-
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/116e2517-d0fc-4eaf-884e-2a4dd9f2a052";
+    device = "/dev/disk/by-uuid/a52dda5f-70f8-4bf6-a62d-ff7b52798bf0";
     fsType = "btrfs";
-    options = ["subvol=home"];
+    options = ["subvol=home" "compress=zstd" "noatime"];
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/116e2517-d0fc-4eaf-884e-2a4dd9f2a052";
+    device = "/dev/disk/by-uuid/a52dda5f-70f8-4bf6-a62d-ff7b52798bf0";
     fsType = "btrfs";
-    options = ["subvol=nix"];
+    options = ["subvol=nix" "compress=zstd" "noatime"];
   };
 
   fileSystems."/persist" = {
-    device = "/dev/disk/by-uuid/116e2517-d0fc-4eaf-884e-2a4dd9f2a052";
+    device = "/dev/disk/by-uuid/a52dda5f-70f8-4bf6-a62d-ff7b52798bf0";
     fsType = "btrfs";
-    options = ["subvol=persist"];
+    options = ["subvol=persist" "compress=zstd" "noatime"];
+    neededForBoot = true;
   };
 
   fileSystems."/var/log" = {
-    device = "/dev/disk/by-uuid/116e2517-d0fc-4eaf-884e-2a4dd9f2a052";
+    device = "/dev/disk/by-uuid/a52dda5f-70f8-4bf6-a62d-ff7b52798bf0";
     fsType = "btrfs";
-    options = ["subvol=log"];
+    options = ["subvol=log" "compress=zstd" "noatime"];
     neededForBoot = true;
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/EA6D-1519";
+    device = "/dev/disk/by-uuid/38D1-D89B";
     fsType = "vfat";
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/87e948e2-0581-4c95-a3a0-ff1d979cd956";}
+    {device = "/dev/disk/by-uuid/aba3ecf3-528f-4ac6-a512-5c331df6cced";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -64,7 +63,9 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp4s0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wwp0s20f0u2i12.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

@@ -9,8 +9,7 @@ NixOS/Home Manager dotfiles repository using Nix flakes for declarative system c
 - `linux/` - Linux Home Manager and shared NixOS modules
 - `macos/` - macOS-specific Home Manager modules
 - `linux/email.nix` - Mail stack (accounts.email, mbsync, msmtp, notmuch, neomutt)
-- `lapping/` - Work laptop configuration
-- `nixos/` - Personal laptop configuration
+- `lapping/` - Personal laptop configuration
 - `nvim/` - Neovim config (Lua): `init.lua`, `lua/config/`, `lua/plugins/`
 - `zsh/` - Zsh configuration files
 - `shared/scripts.nix` and `linux/scripts.nix` - Custom script wrappers packaged via Nix
@@ -80,7 +79,6 @@ stylua .                     # Format all Lua files
 deadnix --fail \
   --exclude \
     lapping/hardware-configuration.nix \
-    nixos/hardware-configuration.nix \
     heisenberg/hardware-configuration.nix \
   -- .                      # Fail if unused Nix code is found
 statix check --ignore '**/hardware-configuration.nix' .
@@ -206,8 +204,7 @@ return {
 
 ### Machine-Specific Configuration
 
-- Work laptop config: `lapping/` directory
-- Personal laptop config: `nixos/` directory
+- Personal laptop config: `lapping/` directory
 - Cross-platform config: `shared/` directory
 - Platform config: `linux/` or `macos/` directory
 

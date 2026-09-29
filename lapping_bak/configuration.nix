@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ../linux/stylix.nix
@@ -9,12 +13,7 @@
     supportedFilesystems = ["btrfs"];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    initrd.luks.devices = {
-      root = {
-        device = "/dev/disk/by-uuid/acfa6150-c5c1-42b8-b9a9-665e4f16278c";
-        preLVM = true;
-      };
-    };
+    extraModulePackages = with config.boot.kernelPackages; [ipu6-drivers];
   };
 
   hardware = {
@@ -23,14 +22,27 @@
     bluetooth = {
       enable = true;
       powerOnBoot = true;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+        };
+      };
     };
+    ipu6 = {
+      enable = true;
+      platform = "ipu6ep";
+    };
+    firmware = with pkgs; [
+      ipu6-camera-bins
+      ivsc-firmware
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  networking.hostName = "nixos";
+  networking.hostName = "lapping";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Oslo";
@@ -53,7 +65,6 @@
     nix-ld.enable = true;
     gnupg.agent.enable = true;
     zsh.enable = true;
-    steam.enable = true;
   };
 
   fonts.packages = with pkgs; [
@@ -65,14 +76,39 @@
 
   services = {
     pcscd.enable = true;
-    udev.packages = [pkgs.yubikey-personalization];
+    pulseaudio.enable = false;
+    kolide-launcher.enable = true;
+    openssh.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      jack.enable = true;
+      wireplumber = {
+        enable = true;
+        extraConfig = {
+          "disable-v4l2" = {
+            "wireplumber.profiles" = {
+              "main" = {"monitor.v4l2" = "disabled";};
+            };
+          };
+        };
+      };
     };
     hardware.bolt.enable = true;
+    tailscale.enable = true;
+    resolved.enable = true;
+    udev.extraRules = ''
+      SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"
+    '';
+  };
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [];
+    config.common.default = "*";
   };
 
   users.users.peder = {

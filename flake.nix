@@ -16,10 +16,6 @@
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    kolide-launcher = {
-      url = "github:/kolide/nix-agent/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = {
@@ -88,7 +84,6 @@
         system = "x86_64-linux";
         modules = [
           ./lapping/configuration.nix
-          inputs.kolide-launcher.nixosModules.kolide-launcher
           inputs.stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           {
@@ -114,23 +109,6 @@
               sharedModules = [inputs.nvf.homeManagerModules.default];
               extraSpecialArgs = {inherit inputs;};
               users.peder = import ./heisenberg/home.nix;
-            };
-          }
-        ];
-      };
-      nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs;};
-        system = "x86_64-linux";
-        modules = [
-          ./nixos/configuration.nix
-          inputs.stylix.nixosModules.stylix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useUserPackages = true;
-              sharedModules = [inputs.nvf.homeManagerModules.default];
-              extraSpecialArgs = {inherit inputs;};
-              users.peder = import ./nixos/home.nix;
             };
           }
         ];
