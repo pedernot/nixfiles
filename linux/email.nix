@@ -396,19 +396,21 @@ in {
 
     notmuch = {
       enable = true;
-      new.tags = [
-        "unread"
-        "inbox"
-      ];
-      search.excludeTags = [
-        "deleted"
-        "spam"
-      ];
-      maildir.synchronizeFlags = true;
-      extraConfig.user = {
-        name = "Peder Notto Galteland";
-        primary_email = "peder.notto@galte.land";
-        other_email = "pederng@gmail.com;";
+      settings = {
+        user = {
+          name = "Peder Notto Galteland";
+          primary_email = "peder.notto@galte.land";
+          other_email = "pederng@gmail.com;";
+        };
+        maildir.synchronizeFlags = true;
+        search.excludeTags = [
+          "deleted"
+          "spam"
+        ];
+        new.tags = [
+          "unread"
+          "inbox"
+        ];
       };
     };
 
