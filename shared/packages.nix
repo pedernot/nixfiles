@@ -29,7 +29,6 @@
     luarocks
     nodejs
     openssl
-    pi-coding-agent
     readline
     ripgrep
     rsync
