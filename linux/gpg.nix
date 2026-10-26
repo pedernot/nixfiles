@@ -20,7 +20,7 @@
           trust = "ultimate";
         }
         {
-          source = ../personal-key;
+          source = ../peder.notto.galte.land.pem;
           trust = "ultimate";
         }
       ];
