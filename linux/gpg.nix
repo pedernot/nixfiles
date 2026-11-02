@@ -16,10 +16,6 @@
       homedir = "${config.xdg.dataHome}/gnupg";
       publicKeys = [
         {
-          source = ../peder.galteland.pem;
-          trust = "ultimate";
-        }
-        {
           source = ../peder.notto.galte.land.pem;
           trust = "ultimate";
         }
