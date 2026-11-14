@@ -8,11 +8,11 @@
   stdenvNoCC,
   unzip,
 }: let
-  version = "263.6379.0";
+  version = "271.2085.0";
   sources = {
     x86_64-linux = {
       url = "https://download.jetbrains.com/language-server/kotlin-server/${version}/kotlin-server-${version}.tar.gz";
-      hash = "sha256-q4ykRV3C/F/hok2yvMxGwQQlTSxGUVXEJR7mXfjz98w=";
+      hash = "sha256-45jnmQJ/QXSeoz+qV0cDB9E9QPkQlhhYx+MK29d4rgg=";
     };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/language-server/kotlin-server/${version}/kotlin-server-${version}-aarch64.sit";
