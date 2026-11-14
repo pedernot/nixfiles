@@ -72,7 +72,7 @@
       pkgs = import nixpkgs {system = "aarch64-darwin";};
       extraSpecialArgs = {inherit inputs;};
       modules = [
-        inputs.nvf.homeManagerModules.default
+        inputs.nvf.homeModules.default
         inputs.stylix.homeModules.stylix
         ./macbook/home.nix
       ];
@@ -89,7 +89,7 @@
           {
             home-manager = {
               useUserPackages = true;
-              sharedModules = [inputs.nvf.homeManagerModules.default];
+              sharedModules = [inputs.nvf.homeModules.default];
               extraSpecialArgs = {inherit inputs;};
               users.peder = import ./lapping/home.nix;
             };
@@ -106,7 +106,7 @@
           {
             home-manager = {
               useUserPackages = true;
-              sharedModules = [inputs.nvf.homeManagerModules.default];
+              sharedModules = [inputs.nvf.homeModules.default];
               extraSpecialArgs = {inherit inputs;};
               users.peder = import ./heisenberg/home.nix;
             };
