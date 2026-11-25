@@ -12,6 +12,7 @@
     k3s
     libcamera
     libnotify
+    lynx
     pinentry-qt
     powertop
     ps_mem
